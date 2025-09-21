@@ -92,7 +92,7 @@ create table if not exists `target_node`
     category_id   bigint          not null ,
     max_mark      double unsigned not null comment '上限分数',
     max_number    tinyint unsigned null comment '最大项数' ,
-    comment          text            null comment '规则说明',
+    comment       text            null comment '规则说明',
 
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
