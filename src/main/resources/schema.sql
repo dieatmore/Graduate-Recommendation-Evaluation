@@ -7,8 +7,8 @@ create table if not exists `user`
     name        varchar(10)   not null ,
     phone       varchar(11)   null ,
     role        char(4)       not null ,
-    college_id  bigint        not null ,
-    major_id    bigint        not null,
+    college_id  bigint        null ,
+    major_id    bigint        null,
 
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
