@@ -99,7 +99,7 @@ create table if not exists `target_submit`
     mark           double                 null ,
     name           varchar(200)           not null comment '提交项名称' ,
     comment        text                   null comment '提交说明',
-    status         tinyint                not null comment '0审核中、1待修改、2被驳回、3已认定' ,
+    status         tinyint                not null default 0 comment '0审核中、1待修改、2被驳回、3已认定' ,
     file           json                   null comment '[{"filename", "path"}]' ,
     record         json                   null comment '[{"userId", "name", "comment", "time"}](导师审批记录信息)' ,
 
