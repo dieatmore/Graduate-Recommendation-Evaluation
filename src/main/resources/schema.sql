@@ -106,16 +106,17 @@ create table if not exists `target_submit`
     id             bigint                 primary key ,
     user_id        bigint                 not null comment '学生id',
     target_node_id bigint                 not null ,
+    root_node_id bigint                   not null ,
     mark           double unsigned        null ,
     name           varchar(200)           not null comment '提交项名称' ,
     comment        text                   null comment '提交说明',
     status         tinyint                not null default 0 comment '0审核中、1待修改、2被驳回、3已认定' ,
-    file           json                   null comment '[{"filename", "path"}]' ,
+    file           json                   not null comment '[{"filename", "path"}]' ,
     record         json                   null comment '[{"userId", "name", "comment", "time"}](导师审批记录信息)' ,
 
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
 
-    index (user_id, target_node_id, status),
+    index (user_id, root_node_id, target_node_id ,status),
     index ((cast(record ->> '$.userId' as unsigned )), status)
 );
