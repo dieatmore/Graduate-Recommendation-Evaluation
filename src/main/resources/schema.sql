@@ -8,12 +8,14 @@ create table if not exists `user`
     phone       varchar(11)   null ,
     role        char(4)       not null ,
     college_id  bigint        null ,
+    category_id bigint        null ,
     major_id    bigint        null,
 
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
 
     unique (account),
+    index (category_id) ,
     index (major_id)
 );
 
@@ -80,7 +82,7 @@ create table if not exists `score`
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
 
-    index (user_id, status)
+    index (user_id)
 );
 
 # 指标节点表
@@ -112,11 +114,26 @@ create table if not exists `target_submit`
     comment        text                   null comment '提交说明',
     status         tinyint                not null default 0 comment '0审核中、1待修改、2被驳回、3已认定' ,
     file           json                   not null comment '[{"filename", "path"}]' ,
-    record         json                   null comment '[{"userId", "name", "comment", "time"}](导师审批记录信息)' ,
+
 
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
 
-    index (user_id, root_node_id, target_node_id ,status),
-    index ((cast(record ->> '$.userId' as unsigned )), status)
+    index (user_id, root_node_id, target_node_id ,status)
+);
+
+# 审批记录表
+create table if not exists `record`
+(
+    id                bigint              primary key ,
+    target_submit_id  bigint              not null ,
+    user_id           bigint              not null ,
+    user_name         varchar(10)         not null ,
+    comment           text                null comment '审批说明',
+
+    create_time datetime         not null default current_timestamp,
+    update_time datetime         not null default current_timestamp on update current_timestamp,
+
+    index (target_submit_id) ,
+    index (user_id)
 );
