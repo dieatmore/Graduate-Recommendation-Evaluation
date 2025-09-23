@@ -1,29 +1,42 @@
-# 学生查找某个根节点下的所有的提交信息(补充root_node_id字段)
+# 学生查找一级指标点下的所有信息(补充root_node_id字段)
 explain
-select ts.name as name, mark, status, ts.comment, file, tn.comment
-from target_submit ts join target_node tn
-on ts.target_node_id = tn.id
-where ts.user_id = 1716251082372431693 and ts.root_node_id = 1342672131274220115;
-
-# 学生上传佐证(json属性数据库层面不能default'[]'，需要手动初始化file为json数组)
-update target_submit ts
-set ts.file = JSON_ARRAY_APPEND(
-        file,
-        '$',  -- 表示往数组末尾追加
-        '{"path": "/uploads/new", "filename": "第一等级.pdf"}'
-              )
-where ts.id = 1323900482271434693 and ts.user_id = 1716251082372431693;
-
-# 学生查找某个根节点的某个状态下的所有提交信息
-explain
-select ts.name as name, mark, status, ts.comment, file, tn.comment
+select ts.name, ts.comment, status, mark, record, tn.comment
 from target_submit ts join target_node tn
 on ts.target_node_id = tn.id
 where ts.user_id = 1716251082372431693
   and ts.root_node_id = 1342672131274220115
-  and ts.status = 0;
+  and tn.category_id = 1266750582271434695;
 
-# 学生新增提交项
+# 学生对于指定指标点上传佐证拼接路径
+explain
+select
+    concat_ws(
+            '/',
+            co.name,
+            ca.name,
+            m.name,
+            concat(u.name, '-', u.account)
+    ) as path
+from
+    user u
+        join major m on u.major_id = m.id
+        join category ca on m.category_id = ca.id
+        join college co on ca.college_id = co.id
+where u.id = 1716251082372431693;
+
+# 学生对于指定指标点上传佐证拼接文件名
+explain
+select
+    concat_ws(
+    '-',
+    ts.name,
+    ts.user_id
+    ) as filename
+from
+    target_submit ts
+where ts.user_id = 1716251082372431693 and ts.target_node_id = 1374672131214278117;
+
+# 学生新增提交项(record初始化为json数组)
 insert into target_submit (
                            id ,
                            user_id ,
@@ -31,7 +44,7 @@ insert into target_submit (
                            root_node_id ,
                            name ,
                            comment ,
-                           file
+                           record
 )
 values (
            1991171284370431693 ,
@@ -41,4 +54,22 @@ values (
            '学术专长-科技竞赛2' ,
            '蓝桥杯' ,
            '[]'
-       )
+       );
+
+# 学生查询个人的成绩统计信息
+explain
+select
+#     已认定成绩
+    sum(case when status = 3 then ts.mark else 0 end) as confirmed_score,
+#     已认定项
+    sum(case when status = 3 then 1 else 0 end) as confirmed_items,
+#     审核中项
+    sum(case when status = 0 then 1 else 0 end) as pending_items,
+#     待修改项
+    sum(case when status = 1 then 1 else 0 end) as modify_items,
+#     已驳回项
+    sum(case when status = 2 then 1 else 0 end) as rejected_items,
+#     总提交项
+    count(*) as total_items
+from target_submit ts
+where ts.user_id = 1716251082372431693;

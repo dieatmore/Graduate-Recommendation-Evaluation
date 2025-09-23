@@ -113,7 +113,7 @@ create table if not exists `target_submit`
     name           varchar(200)           not null comment '提交项名称' ,
     comment        text                   null comment '提交说明',
     status         tinyint                not null default 0 comment '0审核中、1待修改、2被驳回、3已认定' ,
-    file           json                   not null comment '[{"filename", "path"}]' ,
+    record         json                   not null comment '[{"username", "mark", "comment", "time"}]' ,
 
 
     create_time datetime         not null default current_timestamp,
@@ -122,18 +122,18 @@ create table if not exists `target_submit`
     index (user_id, root_node_id, target_node_id ,status)
 );
 
-# 审批记录表
-create table if not exists `record`
+# 提交文件表
+create table if not exists `submit_file`
 (
-    id                bigint              primary key ,
-    target_submit_id  bigint              not null ,
-    user_id           bigint              not null ,
-    user_name         varchar(10)         not null ,
-    comment           text                null comment '审批说明',
+    id               bigint         primary key,
+    target_submit_id bigint         not null,
+    filename         varchar(100)   not null,
+    path             varchar(100)   not null,
 
-    create_time datetime         not null default current_timestamp,
-    update_time datetime         not null default current_timestamp on update current_timestamp,
 
-    index (target_submit_id) ,
-    index (user_id)
+    create_time      datetime     not null default current_timestamp,
+    update_time      datetime     not null default current_timestamp on update current_timestamp,
+
+    index (target_submit_id)
 );
+
