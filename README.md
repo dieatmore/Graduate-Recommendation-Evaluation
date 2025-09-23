@@ -1,6 +1,6 @@
 # Graduate-Recommendation-Evaluation
 
-### OVERVIEW
+## OVERVIEW
 
  推免管理系统项目的后端代码
 
@@ -43,7 +43,7 @@
 1. 编写导师以及学院管理员sql测试脚本
 2. 用户表添加类别id
 3. 指标提交表中json数组形式的record字段舍去，改为创建
- > 审批记录表
+ > 审批记录表-record
 
 <br/>
 2025-9-22
@@ -61,18 +61,18 @@
 <br/>
 
 尝试建立数据库，创建
- > 用户表
+ > 用户表-user
  > 
- > 学院表
+ > 学院表-college
  > 
- > 类别表
+ > 类别表-category
  > 
- > 专业表
+ > 专业表-major
  > 
- > 用户-类别关系表
+ > 用户-类别关系表-user_category
  > 
- > 成绩表
+ > 成绩表-score
  > 
- > 指标节点表
+ > 指标节点表-target_node
  >
- > 指标提交表
+ > 指标提交表-target_submit
