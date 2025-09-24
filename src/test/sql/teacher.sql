@@ -54,7 +54,7 @@ select
     sum(case when status = 3 then ts.mark else 0 end) as confirmed_score,
 #     已认定项数
     sum(case when status = 3 then 1 else 0 end) as confirmed_items,
-#     审核中项数
+#     待审核项数
     sum(case when status = 0 then 1 else 0 end) as pending_items,
 #     待修改项数
     sum(case when status = 1 then 1 else 0 end) as modify_items,
