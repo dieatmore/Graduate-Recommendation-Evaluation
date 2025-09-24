@@ -44,12 +44,12 @@ set
 where ts.user_id = 1716251082372431693
   and ts.target_node_id = 1374672131214278117;
 
-# 导师查询专业下所有学生的成绩统计信息 --select列表中所有非聚合函数的字段，必须全部出现在GROUP BY子句中
+# 导师查询专业下所有学生的成绩统计信息
 explain
 select
-    u.id ,
-    u.name ,
-    u.account ,
+    u.id,
+    u.name,
+    u.account,
 #     已认定成绩
     sum(case when status = 3 then ts.mark else 0 end) as confirmed_score,
 #     已认定项数
@@ -67,4 +67,4 @@ left join target_submit ts on ts.user_id = u.id
 where u.major_id = 1069900462271431694
   and u.role = 3
   and u.category_id = 1266750582271434695
-group by u.id, u.name, u.account;
+group by u.id;
