@@ -15,9 +15,9 @@ import java.util.Optional;
 @EnableJdbcAuditing
 public class SnowflakeGenerator {
     @Bean
-    AuditorAware<String> auditorAware() {
+    AuditorAware<Long> auditorAware() {
         Snowflake s = new Snowflake();
-        return () -> Optional.of(String.valueOf(s.nextId()));
+        return () -> Optional.of(s.nextId());
     }
 
     private static class Snowflake {

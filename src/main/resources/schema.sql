@@ -75,8 +75,8 @@ create table if not exists `score`
 (
     id         bigint         primary key ,
     user_id    bigint         not null ,
-    scorex     double unsigned not null check ( scorex > 0 and scorex <= 100 ) ,
-    ranking    smallint unsigned not null ,
+    scorex     decimal(5, 2) unsigned not null check ( scorex > 0 and scorex <= 100 ) ,
+    ranking    tinyint unsigned not null ,
     status     tinyint        not null check (status in (0,1)) default 0 comment '0未认定 1已认定',
 
     create_time datetime         not null default current_timestamp,
@@ -92,7 +92,7 @@ create table if not exists `target_node`
     parent_id     bigint          null ,
     name          varchar(100)    not null ,
     category_id   bigint          not null ,
-    max_mark      double unsigned not null comment '上限分数',
+    max_mark      decimal(5, 2) unsigned not null comment '上限分数',
     max_number    tinyint unsigned null comment '最大项数' ,
     comment       text            null comment '规则说明',
 
@@ -109,10 +109,10 @@ create table if not exists `target_submit`
     user_id        bigint                 not null comment '学生id',
     target_node_id bigint                 not null ,
     root_node_id bigint                   not null ,
-    mark           double unsigned        null ,
+    mark           decimal(5, 2) unsigned        null ,
     name           varchar(200)           not null comment '提交项名称' ,
     comment        text                   null comment '提交说明',
-    status         tinyint                not null default 0 comment '0审核中、1待修改、2被驳回、3已认定' ,
+    status         char(4)                not null comment '已提交、待修改、被驳回、已认定' ,
     record         json                   not null comment '[{"username", "mark", "comment", "time"}]' ,
 
 
