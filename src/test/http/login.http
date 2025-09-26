@@ -1,0 +1,35 @@
+### 超级管理员登录
+POST http://localhost:8080/api/open/login
+Content-Type: application/json
+
+{
+  "account": "admin",
+  "password": "admin"
+}
+
+### 学院管理员登录
+POST http://localhost:8080/api/open/login
+Content-Type: application/json
+
+{
+  "account": "2025212926",
+  "password": "2025212926"
+}
+
+### 导师登录
+POST http://localhost:8080/api/open/login
+Content-Type: application/json
+
+{
+  "account": "2013016924",
+  "password": "2013016924"
+}
+
+### 学生登录
+POST http://localhost:8080/api/open/login
+Content-Type: application/json
+
+{
+  "account": "2022212916",
+  "password": "wsd03160226"
+}

@@ -1,0 +1,12 @@
+### 学生注册
+POST http://localhost:8080/api/open/register
+Content-Type: application/json
+
+{
+  "account": "2022212916",
+  "password": "wsd03160226",
+  "name": "王思迪",
+  "phone": "15542195379",
+  "collegeId": 1421102755996299264,
+  "majorId": 1421104192805466112
+}

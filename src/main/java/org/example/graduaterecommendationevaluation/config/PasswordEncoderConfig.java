@@ -1,4 +1,4 @@
-package org.example.graduaterecommendationevaluation.component;
+package org.example.graduaterecommendationevaluation.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

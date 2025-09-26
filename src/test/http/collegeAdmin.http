@@ -1,0 +1,73 @@
+### 添加类别
+POST http://localhost:8080/api/collegeadmin/categorys
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbXSwiaWF0IjoxNzU4ODg3NzU2LCJleHAiOjE3NTg5NzQxNTZ9.4kKcgc_HhpEyMxYxKKWf-anXny5yac9yWMp-4Joo7wQ
+Content-Type: application/json
+
+{
+  "name": "test类",
+  "weight": "{\"scoreWeight\": 0.7, \"scoreAll\": 0.3}"
+}
+
+### 查看类别
+GET http://localhost:8080/api/collegeadmin/categorys
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbXSwiaWF0IjoxNzU4ODg3NzU2LCJleHAiOjE3NTg5NzQxNTZ9.4kKcgc_HhpEyMxYxKKWf-anXny5yac9yWMp-4Joo7wQ
+Content-Type: application/json
+
+### 修改类别
+PATCH http://localhost:8080/api/collegeadmin/categorys/1421059686362050560
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbXSwiaWF0IjoxNzU4ODg3NzU2LCJleHAiOjE3NTg5NzQxNTZ9.4kKcgc_HhpEyMxYxKKWf-anXny5yac9yWMp-4Joo7wQ
+Content-Type: application/json
+
+{
+  "name": "test类",
+  "weight": "{\"scoreWeight\": 0.9, \"scoreAll\": 0.1}"
+}
+
+### 删除类别
+DELETE http://localhost:8080/api/collegeadmin/categorys/1421103396974030848
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbMTQyMTEwMzAzMDgyMzg3NDU2MCwxNDIxMTAzMzU5NDUxNzg3MjY0LDE0MjExMDMzOTY5NzQwMzA4NDhdLCJpYXQiOjE3NTg4ODc4ODUsImV4cCI6MTc1ODk3NDI4NX0.24S22UF5AyDcoTptqvcNtmHNQ5x9weELEWWZGvGUZ2o
+
+### 添加专业
+POST http://localhost:8080/api/collegeadmin/categorys/1421103359451787264/majors
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbMTQyMTEwMzAzMDgyMzg3NDU2MCwxNDIxMTAzMzU5NDUxNzg3MjY0LDE0MjExMDMzOTY5NzQwMzA4NDhdLCJpYXQiOjE3NTg4ODc4ODUsImV4cCI6MTc1ODk3NDI4NX0.24S22UF5AyDcoTptqvcNtmHNQ5x9weELEWWZGvGUZ2o
+Content-Type: application/json
+
+{
+  "name": "计算机科学"
+}
+
+### 查看专业
+GET http://localhost:8080/api/collegeadmin/categorys/1421103359451787264/majors
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbMTQyMTEwMzAzMDgyMzg3NDU2MCwxNDIxMTAzMzU5NDUxNzg3MjY0LDE0MjExMDMzOTY5NzQwMzA4NDhdLCJpYXQiOjE3NTg4ODc4ODUsImV4cCI6MTc1ODk3NDI4NX0.24S22UF5AyDcoTptqvcNtmHNQ5x9weELEWWZGvGUZ2o
+Content-Type: application/json
+
+### 修改专业
+PATCH http://localhost:8080/api/collegeadmin/categorys/1421059581659639808/majors/1421094109262442496
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbMTQyMTEwMzAzMDgyMzg3NDU2MCwxNDIxMTAzMzU5NDUxNzg3MjY0LDE0MjExMDMzOTY5NzQwMzA4NDhdLCJpYXQiOjE3NTg4ODc4ODUsImV4cCI6MTc1ODk3NDI4NX0.24S22UF5AyDcoTptqvcNtmHNQ5x9weELEWWZGvGUZ2o
+Content-Type: application/json
+
+{
+  "name": "111"
+}
+
+### 删除专业
+DELETE http://localhost:8080/api/collegeadmin/categorys/1421103396974030848/majors/1421103575437471744
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbMTQyMTEwMzAzMDgyMzg3NDU2MCwxNDIxMTAzMzU5NDUxNzg3MjY0LDE0MjExMDMzOTY5NzQwMzA4NDhdLCJpYXQiOjE3NTg4ODc4ODUsImV4cCI6MTc1ODk3NDI4NX0.24S22UF5AyDcoTptqvcNtmHNQ5x9weELEWWZGvGUZ2o
+
+### 添加导师
+POST http://localhost:8080/api/collegeadmin/teachers
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbMTQyMTEwMzAzMDgyMzg3NDU2MCwxNDIxMTAzMzU5NDUxNzg3MjY0XSwiaWF0IjoxNzU4ODkwOTAzLCJleHAiOjE3NTg5NzczMDN9.6V9Ca94Oh4qBSGdzhgpzfaQHlNE921NO672czq4Egzg
+Content-Type: application/json
+
+{
+  "account": "2013016924",
+  "name": "王波"
+}
+
+### 给指定导师分配类别
+PATCH http://localhost:8080/api/collegeadmin/teachers/1421116745589780480
+token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjExMDI5NzcxNzg3MjY0MDAsInJvbGUiOiI2ZlQ0IiwiY29sbGVnZUlkIjoxNDIxMTAyNzU1OTk2Mjk5MjY0LCJjYXRlZ29yeUlkIjpbMTQyMTEwMzAzMDgyMzg3NDU2MCwxNDIxMTAzMzU5NDUxNzg3MjY0XSwiaWF0IjoxNzU4ODkyODg0LCJleHAiOjE3NTg5NzkyODR9.ZV5e433Fiqs0t4Pstcf42l4gwJ-9HY6Y0jd3h1Fp2MU
+Content-Type: application/json
+
+[1421103030823874560, 1421103359451787264]
+

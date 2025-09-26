@@ -1,0 +1,58 @@
+package org.example.graduaterecommendationevaluation.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.example.graduaterecommendationevaluation.dox.Category;
+import org.example.graduaterecommendationevaluation.dox.College;
+import org.example.graduaterecommendationevaluation.dox.Major;
+import org.example.graduaterecommendationevaluation.dox.User;
+import org.example.graduaterecommendationevaluation.repository.UserRepository;
+import org.example.graduaterecommendationevaluation.service.CollegeService;
+import org.example.graduaterecommendationevaluation.service.UserService;
+import org.example.graduaterecommendationevaluation.vo.ResultVO;
+import org.springframework.web.bind.annotation.*;
+
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/admin/")
+public class AdminController {
+    private final CollegeService collegeService;
+    private final UserService userService;
+
+    // 查看所有学院
+    @GetMapping("colleges")
+    public ResultVO listColleges(){
+        return ResultVO.success(collegeService.listColleges());
+    }
+
+    // 添加学院
+    @PostMapping("colleges")
+    public ResultVO addCollege(@RequestBody College college) {
+        collegeService.addCollege(college);
+        return ResultVO.ok();
+    }
+
+    // 修改学院
+    @PatchMapping("colleges/{collegeId}")
+    public ResultVO updateCollege(@PathVariable Long collegeId,
+                                  @RequestBody College college) {
+        collegeService.updateCollege(collegeId, college);
+        return ResultVO.ok();
+    }
+
+    // 删除学院
+    @DeleteMapping("colleges/{collegeId}")
+    public ResultVO deleteCollege(@PathVariable Long collegeId) {
+        collegeService.deleteCollege(collegeId);
+        return ResultVO.ok();
+    }
+
+    // 添加学院管理员
+    @PostMapping("colleges/{collegeId}")
+    public ResultVO addCollegeAdmin(@PathVariable Long collegeId,
+                                    @RequestBody User user,
+                                    @RequestAttribute("role")  String role) {
+        userService.addUser(collegeId, user, role);
+        return ResultVO.ok();
+    }
+}

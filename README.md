@@ -24,18 +24,53 @@
 
 #### 超级管理员
 
++ 学院的增删改查
++ 添加学院管理员
+
 #### 学院管理员
+
++ 类别的增删改查 
++ 专业的增删改查 
++ 添加导师 
++ 给指定导师分配类别
 
 #### 导师
 
 #### 学生
 
++ 注册
 
 <hr/>
 <br/>
 
 ### ✅ update
 <br/>
+
+<br/>
+2025-9-26
+<br/>
+<br/>
+
+**编写http脚本测试**
+
+四个角色用户的登录
+
+超级管理员：
+> 1. 学院的增删改查
+> 2. 添加学院管理员
+
+学院管理员：
+> 1. 类别的增删改查
+> 2. 专业的增删改查
+> 3. 添加导师
+> 4. 给指定导师分配类别
+
+学生：
+> 注册
+
+config:
++ WebMvcConfig: LoginInterceptor、AdminInterceptor
++ JacksonConfig
 
 <br/>
 2025-9-25
@@ -47,6 +82,7 @@
 + InitService初始化超级管理员
 + 封装ResultVO
 + 封装Code以及自定义异常XException
++ ExceptionController
 
 雪花算法返回String类型修改为Long类型
 
@@ -55,7 +91,7 @@
 <br/>
 <br/>
 
-完善sql脚本测试
+**完善sql脚本测试**
  + 使用 with recursive 递归 cte 查询指定节点及其所有后代节点
 
 student：
