@@ -1,20 +1,20 @@
 ### 添加学院
 POST http://localhost:8080/api/admin/colleges
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjEwMjExMzY3NjE0NTA0OTYsInJvbGUiOiJ1UTdpIiwiY2F0ZWdvcnlJZCI6W10sImlhdCI6MTc1ODg3MjI4NSwiZXhwIjoxNzU4OTU4Njg1fQ.hBMS-jxn3P6sTVHCwmSRYn9KxvJNS0E2l2F7_hIVSL8
+token:{{ token }}
 Content-Type: application/json
 
 {
-  "name": "计算机与控制工程学院"
+  "name": "test学院"
 }
 
 ### 查看学院
 GET http://localhost:8080/api/admin/colleges
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjEwMjExMzY3NjE0NTA0OTYsInJvbGUiOiJ1UTdpIiwiY2F0ZWdvcnlJZCI6W10sImlhdCI6MTc1ODg3MjI4NSwiZXhwIjoxNzU4OTU4Njg1fQ.hBMS-jxn3P6sTVHCwmSRYn9KxvJNS0E2l2F7_hIVSL8
+token:{{ token }}
 Content-Type: application/json
 
 ### 修改学院
-PATCH http://localhost:8080/api/admin/colleges/1421038251111411712
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjEwMjExMzY3NjE0NTA0OTYsInJvbGUiOiJ1UTdpIiwiY2F0ZWdvcnlJZCI6W10sImlhdCI6MTc1ODg3MjI4NSwiZXhwIjoxNzU4OTU4Njg1fQ.hBMS-jxn3P6sTVHCwmSRYn9KxvJNS0E2l2F7_hIVSL8
+PATCH http://localhost:8080/api/admin/colleges/1421418080923086144
+token:{{ token }}
 Content-Type: application/json
 
 {
@@ -22,15 +22,15 @@ Content-Type: application/json
 }
 
 ### 删除学院
-DELETE http://localhost:8080/api/admin/colleges/1421102755996299264
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjEwMjExMzY3NjE0NTA0OTYsInJvbGUiOiJ1UTdpIiwiY2F0ZWdvcnlJZCI6W10sImlhdCI6MTc1ODg4NzUxOCwiZXhwIjoxNzU4OTczOTE4fQ.plG8zFd5UfsVePV4EKU9WebKlknO5X3i_eTqbXOe5oI
+DELETE http://localhost:8080/api/admin/colleges/1421422972010033152
+token:{{ token }}
 
 ### 添加学院管理员
-POST http://localhost:8080/api/admin/colleges/1421102755996299264
-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjE0MjEwMjExMzY3NjE0NTA0OTYsInJvbGUiOiJ1UTdpIiwiY2F0ZWdvcnlJZCI6W10sImlhdCI6MTc1ODg3MjI4NSwiZXhwIjoxNzU4OTU4Njg1fQ.hBMS-jxn3P6sTVHCwmSRYn9KxvJNS0E2l2F7_hIVSL8
+POST http://localhost:8080/api/admin/colleges/1421415919589847040
+token:{{ token }}
 Content-Type: application/json
 
 {
   "account": "1025212926",
-  "name": "计控2管理员"
+  "name": "计控管理员"
 }

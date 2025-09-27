@@ -3,10 +3,10 @@ POST http://localhost:8080/api/open/register
 Content-Type: application/json
 
 {
-  "account": "2022212916",
-  "password": "wsd03160226",
-  "name": "王思迪",
+  "account": "2022212917",
+  "password": "zty03160226",
+  "name": "赵天瑜",
   "phone": "15542195379",
-  "collegeId": 1421102755996299264,
-  "majorId": 1421104192805466112
+  "collegeId": 1421415919589847040,
+  "majorId": 1421438941696684032
 }

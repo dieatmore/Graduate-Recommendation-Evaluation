@@ -64,7 +64,7 @@ select
     count(*) as total_items
 from user u
 left join target_submit ts on ts.user_id = u.id
-where u.major_id = 1069900462271431694
-  and u.role = 3
-  and u.category_id = 1266750582271434695
+where u.major_id = 1421104192805466112
+  and u.role = 'po8V'
+  and u.category_id = 1421103359451787264
 group by u.id;

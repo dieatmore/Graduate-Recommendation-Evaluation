@@ -22,7 +22,7 @@ public class TargetNode {
     private Long parentId;
     private String name;
     private Long categoryId;
-    private BigDecimal maxMark;
+    private Double maxMark;
     private Short maxNumber;
     private String comment;
 

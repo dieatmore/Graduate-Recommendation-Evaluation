@@ -29,8 +29,11 @@ public class LoginInterceptor implements HandlerInterceptor {
         if(!decode.getClaim("collegeId").isMissing()) {
             request.setAttribute("collegeId", decode.getClaim("collegeId").asLong());
         }
-        if (!decode.getClaim("categoryId").isMissing()) {
-            request.setAttribute("categoryId", decode.getClaim("categoryId").asList(Long.class));
+        if (!decode.getClaim("catsId").isMissing()) {
+            request.setAttribute("catsId", decode.getClaim("catsId").asList(Long.class));
+        }
+        if (!decode.getClaim("catId").isMissing()) {
+            request.setAttribute("catId", decode.getClaim("catId").asLong());
         }
         if (!decode.getClaim("majorId").isMissing()) {
             request.setAttribute("majorId", decode.getClaim("majorId").asLong());

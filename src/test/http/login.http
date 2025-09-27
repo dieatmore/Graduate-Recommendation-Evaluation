@@ -7,15 +7,17 @@ Content-Type: application/json
   "password": "admin"
 }
 
+> {% client.global.set("token", response.headers.valueOf("token")); %}
 ### 学院管理员登录
 POST http://localhost:8080/api/open/login
 Content-Type: application/json
 
 {
-  "account": "2025212926",
-  "password": "2025212926"
+  "account": "1025212926",
+  "password": "1025212926"
 }
 
+> {% client.global.set("token", response.headers.valueOf("token")); %}
 ### 导师登录
 POST http://localhost:8080/api/open/login
 Content-Type: application/json
@@ -25,6 +27,8 @@ Content-Type: application/json
   "password": "2013016924"
 }
 
+> {% client.global.set("token", response.headers.valueOf("token")); %}
+
 ### 学生登录
 POST http://localhost:8080/api/open/login
 Content-Type: application/json
@@ -33,3 +37,6 @@ Content-Type: application/json
   "account": "2022212916",
   "password": "wsd03160226"
 }
+
+> {% client.global.set("token", response.headers.valueOf("token")); %}
+

@@ -27,7 +27,7 @@ public class TargetSubmit {
     private Long userId;
     private Long targetNodeId;
     private Long rootNodeId;
-    private BigDecimal mark;
+    private Double mark;
     private String name;
     private String comment;
     private String status;

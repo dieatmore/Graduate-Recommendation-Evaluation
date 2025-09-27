@@ -13,8 +13,8 @@ where tn.category_id = 1266750582271434695 and tn.parent_id = 134267213127422011
 # 递归查询所有子节点
 with recursive cte as (
     select * from target_node tn
-             where tn.category_id = 1266750582271434695
-                   and tn.parent_id = 1342672131274220115
+             where tn.category_id = 1421433267587706880
+                   and tn.parent_id is null
     union all
     select tn.* from target_node tn
         join cte where tn.parent_id = cte.id

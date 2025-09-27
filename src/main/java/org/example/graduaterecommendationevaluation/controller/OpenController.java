@@ -39,11 +39,13 @@ public class OpenController {
             token1.put("collegeId",userR.getCollegeId());
         }
         if(userService.getCategoryIdByUserId(userR.getId()) != null) {
-            token1.put("categoryId",userService.getCategoryIdByUserId(userR.getId()));
+            if(userR.getRole().equals(User.TEACHER)) {
+                token1.put("catsId",userService.getCategoryIdByUserId(userR.getId()));
+            }
+            if(userR.getRole().equals(User.STUDENT)) {
+                token1.put("catId",userR.getCategoryId());
+            }
         }
-//        if (userR.getCategoryId() != null) {
-//            token1.put("categoryId",userR.getCategoryId());
-//        }
         if(userR.getMajorId() != null) {
             token1.put("majorId",userR.getMajorId());
         }

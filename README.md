@@ -33,6 +33,7 @@
 + 专业的增删改查 
 + 添加导师 
 + 给指定导师分配类别
++ 添加规则指标节点
 
 #### 导师
 
@@ -45,6 +46,34 @@
 
 ### ✅ update
 <br/>
+
+<br/>
+2025-9-27
+<br/>
+<br/>
+
+逻辑判断都放在Service 层，而且没有抽象出可复用的方法
++ 导致**Service 层过于冗余**，职责过重
+
+> 可以复用的逻辑判断等代码抽象成方法，部分代码放在Controller 层
+
+<hr>
+
+保存学院管理员与类别关系，学院管理员的token中保存了List< Long >类别ID
+
++ 学院管理员新建类别后，没有对该类别的权限，因为权限根据token判断，而token只有重新登录后才更新，不会自动刷新
+
+所以学院管理员的token中只保存学院college ID，对类别的操作权限根据college ID判断。
+
+> 用户类别关系表改为**导师类别关系表**， token 逻辑更改
+
+<hr>
+
+导师：
+> 1. 查看自己管理的类别
+
+学院管理员：
+> 1. 添加规则指标节点
 
 <br/>
 2025-9-26
@@ -69,7 +98,7 @@
 > 注册
 
 config:
-+ WebMvcConfig: LoginInterceptor、AdminInterceptor
++ WebMvcConfig: LoginInterceptor、四个角色的Interceptor
 + JacksonConfig
 
 <br/>
@@ -128,7 +157,7 @@ collegeAdmin:
 
 1. 编写指标节点和学生sql测试脚本
 2. 指标提交表添加根节点id字段
-3. 给file字段添加default '[]'发现mysql不支持给json属性添加默认值，只能手动初始化file字段为json数组
+3. 给file字段添加default '[ ]' 发现mysql不支持给json属性添加默认值，只能手动初始化file字段为json数组
 
 
 <br/>

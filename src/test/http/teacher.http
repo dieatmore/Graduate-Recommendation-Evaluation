@@ -1,0 +1,3 @@
+### 查看自己管理的类别
+GET http://localhost:8080/api/teacher/categorys
+token:{{ token }}

@@ -14,4 +14,8 @@ public interface UserCategoryRepository extends ListCrudRepository<UserCategory,
              SELECT category_id FROM user_category WHERE user_id = :userId
            """)
     List<Long> findCategoryIdByUserId(Long userId);
+
+    void deleteByUserId(Long teacherId);
+
+    boolean existsByCategoryId(Long categoryId);
 }

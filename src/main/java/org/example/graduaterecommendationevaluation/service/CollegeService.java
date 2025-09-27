@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class CollegeService {
     private final CollegeRepository collegeRepository;
@@ -34,14 +33,18 @@ public class CollegeService {
         return collegeRepository.findAll();
     }
 
-    // 修改学院
-    @Transactional
-    public void updateCollege(Long collegeId,College college) {
-        College c =  collegeRepository.findById(collegeId)
+    // 查找学院
+    public College getCollege(Long collegeId) {
+        return collegeRepository.findById(collegeId)
                 .orElseThrow(()-> XException.builder()
                         .number(Code.ERROR)
                         .message("不存在该学院！")
                         .build());
+    }
+
+    // 修改学院
+    @Transactional
+    public void updateCollege(College c,College college) {
         c.setName(college.getName());
         collegeRepository.save(c);
     }
@@ -60,131 +63,82 @@ public class CollegeService {
 
     // 创建类别
     @Transactional
-    public void addCategory(Category category, Long uid) {
+    public void addCategory(Category category) {
         categoryRepository.save(category);
-        UserCategory uc = UserCategory.builder()
-                .userId(uid)
-                .categoryId(category.getId())
-                .build();
-        userCategoryRepository.save(uc);
     }
 
-    // 查看所有类别
-    public List<Category> listCategories(Long collegeId) {
+    // 根据学院id获取类别组
+    public List<Category> getCategorysBycolId(Long collegeId) {
         return categoryRepository.findByCollegeId(collegeId);
+    }
+
+    // 根据学院id和类别id获取类别
+    public Category getCatsBycolIdAndCatId(Long categoryId , Long collegeId) {
+        return categoryRepository.findByIdAndCollegeId(categoryId, collegeId);
     }
 
     // 修改类别
     @Transactional
-    public void updateCategory(Long categoryId,Category category,Long collegeId) {
-        Category c = categoryRepository.findByIdAndCollegeId(categoryId, collegeId);
-        if(c==null){
-            throw XException.builder()
-                    .number(Code.ERROR)
-                    .message("该类别不存在！")
-                    .build();
-        }
-        c.setName(category.getName());
-        c.setWeight(category.getWeight());
+    public void updateCategory(Category c,Category category) {
         categoryRepository.save(c);
     }
 
     // 删除类别
     @Transactional
-    public void deleteCategory(Long categoryId, Long collegeId) {
+    public void deleteCategory(Long categoryId) {
         if(majorRepository.existsByCategoryId(categoryId)) {
             throw XException.builder()
                     .number(Code.ERROR)
                     .message("该类别有专业，不可删除！")
                     .build();
         }
-        categoryRepository.deleteByIdAndCollegeId(categoryId, collegeId);
-        userCategoryRepository.deleteByCategoryId(categoryId);
+        if(userCategoryRepository.existsByCategoryId(categoryId)) {
+            throw XException.builder()
+                    .number(Code.ERROR)
+                    .message("该类别有导师管理，不可删除！")
+                    .build();
+        }
+        categoryRepository.deleteById(categoryId);
     }
 
     // 创建专业
     @Transactional
-    public void addMajor(Major major, Long catId, List<Long> categoryId) {
-        if(categoryId == null){
-            throw XException.builder()
-                    .code(Code.BAD_REQUEST)
-                    .build();
-        }
-        if(!categoryId.contains(catId)) {
-            throw XException.builder()
-                    .code(Code.FORBIDDEN)
-                    .build();
-        }
-        log.debug("数组：{}",categoryId);
-        major.setCategoryId(catId);
+    public void addMajor(Major major) {
         majorRepository.save(major);
     }
 
     // 查看所有专业
-    public List<Major> listMajors(Long catId, List<Long> categoryId) {
-        if(categoryId == null){
-            throw XException.builder()
-                    .code(Code.BAD_REQUEST)
-                    .build();
-        }
-        if(!categoryId.contains(catId)) {
-            throw XException.builder()
-                    .code(Code.FORBIDDEN)
-                    .build();
-        }
+    public List<Major> listMajors(Long catId) {
         return majorRepository.findByCategoryId(catId);
+    }
+
+    // 判断专业存在
+    public Major findMajorByMidAndCatId(Long majorId, Long catId) {
+        Major m = majorRepository.findByIdAndCategoryId(majorId, catId);
+        if(m==null){
+            throw XException.builder()
+                    .number(Code.ERROR)
+                    .message("该专业不存在！")
+                    .build();
+        }
+        return m;
     }
 
     // 修改专业
     @Transactional
-    public void updateMajor(Long majorId, Major major, Long catId, List<Long> categoryId) {
-        if(categoryId == null){
-            throw XException.builder()
-                    .code(Code.BAD_REQUEST)
-                    .build();
-        }
-        if(!categoryId.contains(catId)) {
-            throw XException.builder()
-                    .code(Code.FORBIDDEN)
-                    .build();
-        }
-        Major m = majorRepository.findByIdAndCategoryId(majorId, catId);
-        if(m==null){
-            throw XException.builder()
-                    .number(Code.ERROR)
-                    .message("该专业不存在！")
-                    .build();
-        }
-        m.setName(major.getName());
-        majorRepository.save(m);
+    public void updateMajor(Major major) {
+        majorRepository.save(major);
     }
 
     // 删除专业
     @Transactional
-    public void deleteMajor(Long majorId, Long catId, List<Long> categoryId) {
-        if(categoryId == null){
-            throw XException.builder()
-                    .code(Code.BAD_REQUEST)
-                    .build();
-        }
-        if(!categoryId.contains(catId)) {
-            throw XException.builder()
-                    .code(Code.FORBIDDEN)
-                    .build();
-        }
-        Major m = majorRepository.findByIdAndCategoryId(majorId, catId);
-        if(m==null){
-            throw XException.builder()
-                    .number(Code.ERROR)
-                    .message("该专业不存在！")
-                    .build();
-        }
+    public void deleteMajor(Long majorId) {
         if(userRepository.existsByMajorId(majorId)) {
             throw XException.builder()
                     .number(Code.ERROR)
                     .message("该专业有学生，不可删除！")
                     .build();
         }
-        majorRepository.delete(m);
+        majorRepository.deleteById(majorId);
     }
 }

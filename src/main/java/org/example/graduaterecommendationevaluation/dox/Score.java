@@ -20,7 +20,7 @@ public class Score {
     @CreatedBy
     private Long id;
     private Long userId;
-    private BigDecimal scorex;
+    private Double scorex;
     private Short ranking;
     private Short status;
 
