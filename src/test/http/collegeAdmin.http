@@ -91,3 +91,7 @@ Content-Type: application/json
   "maxMark": 20.00,
   "maxNumber": 1
 }
+
+### 查看所有指标节点
+GET http://localhost:8080/api/collegeadmin/targetnode/1421433267587706880
+token:{{ token }}

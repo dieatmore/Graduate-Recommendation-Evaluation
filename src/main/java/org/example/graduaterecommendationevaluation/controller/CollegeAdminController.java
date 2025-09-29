@@ -5,6 +5,7 @@ import org.example.graduaterecommendationevaluation.dox.Category;
 import org.example.graduaterecommendationevaluation.dox.Major;
 import org.example.graduaterecommendationevaluation.dox.TargetNode;
 import org.example.graduaterecommendationevaluation.dox.User;
+import org.example.graduaterecommendationevaluation.dto.TargetNodeTreeDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
 import org.example.graduaterecommendationevaluation.service.CollegeService;
@@ -186,10 +187,11 @@ public class CollegeAdminController {
     }
 
     // 查看指标节点
-//    @GetMapping("targetnode/{catId}")
-//    public ResultVO listTargetNodes(@PathVariable Long catId,
-//                                    @RequestAttribute("collegeId") Long collegeId) {
-//        catExist(catId, collegeId);
-//        targetService.
-//    }
+    @GetMapping("targetnode/{catId}")
+    public ResultVO listTargetNodes(@PathVariable Long catId,
+                                    @RequestAttribute("collegeId") Long collegeId) {
+        catExist(catId, collegeId);
+        List<TargetNodeTreeDTO> t = targetService.listTargetNodeTree(catId);
+        return ResultVO.success(t);
+    }
 }
