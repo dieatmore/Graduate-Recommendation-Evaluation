@@ -52,10 +52,7 @@ public class CollegeAdminController {
     public ResultVO listCategories(@RequestAttribute("collegeId") Long collegeId){
         List<Category> ca = collegeService.getCategorysBycolId(collegeId);
         if(ca.isEmpty()) {
-            throw XException.builder()
-                    .number(Code.ERROR)
-                    .message("该用户没有管理的类别！")
-                    .build();
+            return ResultVO.error(Code.ERROR, "该用户没有管理的类别！");
         }
         return ResultVO.success(ca);
     }
@@ -128,13 +125,9 @@ public class CollegeAdminController {
     // 添加导师
     @PostMapping("teachers")
     public ResultVO addUser(@RequestAttribute("collegeId") Long collegeId,
-                            @RequestBody User user,
-                            @RequestAttribute("role") String role) {
+                            @RequestBody User user) {
         if(userService.getUser(user.getAccount())!=null) {
-            throw XException.builder()
-                    .number(Code.ERROR)
-                    .message("该用户已存在")
-                    .build();
+            return ResultVO.error(Code.ERROR, "该用户已存在！");
         }
         User u = User.builder()
                 .account(user.getAccount())
@@ -154,21 +147,16 @@ public class CollegeAdminController {
                                    @RequestAttribute("collegeId") Long collegeId) {
         userService.judgeUser(teacherId);
         if (!catsId.isEmpty()) {
-            List<Category> categories = userService.findCatsId(catsId);
+            List<Category> categories = collegeService.findCatsId(catsId);
             if (categories.size() != catsId.size()) {
-                throw XException.builder()
-                        .number(Code.ERROR)
-                        .message("不存在该类别！")
-                        .build();
+                return ResultVO.error(Code.ERROR, "不存在该类别！");
             }
             List<Long> invalidIds = categories.stream()
                     .filter(cat -> !cat.getCollegeId().equals(collegeId)) // 学院id不匹配
                     .map(Category::getId)
                     .toList();
             if (!invalidIds.isEmpty()) {
-                throw XException.builder()
-                        .code(Code.FORBIDDEN)
-                        .build();
+                return ResultVO.error(Code.FORBIDDEN);
             }
         }
         userService.shareCategorys(teacherId, catsId);

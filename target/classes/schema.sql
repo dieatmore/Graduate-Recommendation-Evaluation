@@ -99,6 +99,7 @@ create table if not exists `target_node`
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
 
+    index (parent_id),
     index (category_id, parent_id)
 );
 

@@ -141,4 +141,9 @@ public class CollegeService {
         }
         majorRepository.deleteById(majorId);
     }
+
+    // 根据类别id组查找类别组
+    public List<Category> findCatsId(List<Long> catsId) {
+        return categoryRepository.findAllById(catsId);
+    }
 }

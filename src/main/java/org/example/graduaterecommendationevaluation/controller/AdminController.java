@@ -60,10 +60,7 @@ public class AdminController {
                                     @RequestAttribute("role")  String role) {
         collegeService.getCollege(collegeId);
         if(userService.getUser(user.getAccount()) != null) {
-            throw XException.builder()
-                    .number(Code.ERROR)
-                    .message("该用户已存在")
-                    .build();
+            return ResultVO.error(Code.ERROR, "该用户已存在！");
         }
         User u = User.builder()
                 .account(user.getAccount())

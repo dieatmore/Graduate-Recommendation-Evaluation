@@ -43,11 +43,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // 根据类别id组查找类别组
-    public List<Category> findCatsId(List<Long> catsId) {
-        return categoryRepository.findAllById(catsId);
-    }
-
     // id判断用户是否存在
     public void  judgeUser(Long id) {
         if(userRepository.findById(id).isEmpty()) {

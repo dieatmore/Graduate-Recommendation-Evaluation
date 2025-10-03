@@ -20,3 +20,19 @@ with recursive cte as (
         join cte where tn.parent_id = cte.id
 )
 select * from cte;
+
+# 根据根节点递归查询所有子节点
+with recursive cte as (
+    select * from target_node tn
+    where tn.category_id = 1421433267587706880
+      and tn.parent_id = 1421469131957137408
+    union all
+    select tn.* from target_node tn
+                         join cte where tn.parent_id = cte.id
+)
+select * from cte;
+
+# 判断是不是叶子节点
+explain
+select count(*) from target_node tn
+where tn.parent_id = 1421470110047858688

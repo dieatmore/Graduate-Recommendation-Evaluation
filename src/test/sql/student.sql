@@ -1,11 +1,10 @@
 # 学生查找一级指标点下的所有信息(补充root_node_id字段)
 explain
-select ts.name, ts.comment, status, mark, record, tn.comment
-from target_submit ts join target_node tn
-on ts.target_node_id = tn.id
-where ts.user_id = 1716251082372431693
-  and ts.root_node_id = 1342672131274220115
-  and tn.category_id = 1266750582271434695;
+select name, status, mark, filename, comment, record
+from target_submit ts
+    left join submit_file sf on ts.id = sf.target_submit_id
+where ts.user_id = 1421465359751114752
+  and ts.root_node_id = 1421469131957137408;
 
 # 学生对于指定指标点上传佐证拼接路径
 explain
@@ -73,3 +72,10 @@ select
     count(*) as total_items
 from target_submit ts
 where ts.user_id = 1716251082372431693;
+
+# 学生根据根节点id查看提交信息
+select *
+from target_submit ts
+         left join submit_file sf on ts.id = sf.target_submit_id
+where ts.user_id = 1421465359751114752
+  and ts.root_node_id = 1421469131957137408

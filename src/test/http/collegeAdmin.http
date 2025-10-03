@@ -76,8 +76,8 @@ token:{{ token }}
 Content-Type: application/json
 
 {
-  "name": "学术专长",
-  "maxMark": 50.00
+  "name": "其它方面",
+  "maxMark": 40.00
 }
 
 ### 添加指标节点规则(其它节点)
@@ -86,10 +86,9 @@ token:{{ token }}
 Content-Type: application/json
 
 {
-  "name": "二等奖",
-  "parentId": 1421470226297188352,
-  "maxMark": 20.00,
-  "maxNumber": 1
+  "name": "高质量论文",
+  "parentId": 1421469131957137408,
+  "maxMark": 30.00
 }
 
 ### 查看所有指标节点

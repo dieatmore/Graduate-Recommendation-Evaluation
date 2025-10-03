@@ -10,3 +10,19 @@ Content-Type: application/json
   "collegeId": 1421415919589847040,
   "majorId": 1421438941696684032
 }
+
+### 查看指标根节点
+GET http://localhost:8080/api/student/nodes
+token:{{ token }}
+
+### 根据父节点查看所有子节点
+GET http://localhost:8080/api/student/childrenNodes/1421469834553389056
+token:{{ token }}
+
+### 指标节点提交
+POST http://localhost:8080/api/student/nodes/1421469131957137408/submits/1421470383180935168
+token:{{ token }}
+
+### 学生根据根节点id获取所有的提交信息
+GET http://localhost:8080/api/student/nodes/1421469131957137408/submits
+token:{{ token }}
