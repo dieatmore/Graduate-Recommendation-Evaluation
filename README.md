@@ -35,17 +35,35 @@
 + 给指定导师分配类别
 + 添加规则指标节点
 
-#### 导师
+#### 导师 (学院管理员)
+
++ 查看某专业下所有学生的统计信息
 
 #### 学生
 
 + 注册
++ 学生新增指标提交
++ 学生根据根节点id获取所有的提交信息
 
 <hr/>
 <br/>
 
 ### ✅ update
 <br/>
+
+<br/>
+2025-10-04
+<br/>
+<br/>
+
+Student：
++ 学生 提交/更改 加权成绩信息
+
+Teacher(CollegeAdmin)：
++ 查看自己管理的类别
++ 查看某专业下所有学生的统计信息(StudentsDTO)
+
+> CollegeAdmin和Teacher都有审批的功能，统一Controller接口在TeacherController
 
 <br/>
 2025-10-03

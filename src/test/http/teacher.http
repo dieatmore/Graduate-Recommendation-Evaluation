@@ -1,3 +1,7 @@
 ### 查看自己管理的类别
 GET http://localhost:8080/api/teacher/categorys
 token:{{ token }}
+
+### 查看某专业下所有学生的统计信息
+GET http://localhost:8080/api/teacher/categorys/1421433267587706880/majors/1421438941696684032/students
+token:{{ token }}

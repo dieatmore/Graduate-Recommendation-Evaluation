@@ -27,7 +27,7 @@ public class CollegeAdminController {
     private final PasswordEncoder passwordEncoder;
 
     // 判断类别存在(操作权限)
-    public Category catExist(Long categoryId, Long collegeId) {
+    public void catExist(Long categoryId, Long collegeId) {
         Category c = collegeService.getCatsBycolIdAndCatId(categoryId, collegeId);
         if(c==null){
             throw XException.builder()
@@ -35,7 +35,6 @@ public class CollegeAdminController {
                     .message("该类别不存在！")
                     .build();
         }
-        return c;
     }
 
     // 添加类别
@@ -62,7 +61,8 @@ public class CollegeAdminController {
     public ResultVO updateCategory(@PathVariable Long categoryId,
                                    @RequestBody Category category,
                                    @RequestAttribute("collegeId") Long collegeId) {
-        Category c = catExist(categoryId, collegeId);
+        catExist(categoryId, collegeId);
+        Category c = collegeService.getCatById(categoryId);
         c.setName(category.getName());
         c.setWeight(category.getWeight());
         collegeService.updateCategory(c, category);
@@ -73,8 +73,8 @@ public class CollegeAdminController {
     @DeleteMapping("categorys/{categoryId}")
     public ResultVO deleteCategory(@PathVariable Long categoryId,
                                    @RequestAttribute("collegeId") Long collegeId) {
-        Category c = catExist(categoryId, collegeId);
-        collegeService.deleteCategory(c.getId());
+        catExist(categoryId, collegeId);
+        collegeService.deleteCategory(categoryId);
         return ResultVO.ok();
     }
 

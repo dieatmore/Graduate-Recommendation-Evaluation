@@ -146,4 +146,13 @@ public class CollegeService {
     public List<Category> findCatsId(List<Long> catsId) {
         return categoryRepository.findAllById(catsId);
     }
+
+    // 根据类别id查找类别
+    public Category getCatById(Long catId) {
+        return categoryRepository.findById(catId)
+                .orElseThrow(()-> XException.builder()
+                        .number(Code.ERROR)
+                        .message("不存在该类别！")
+                        .build());
+    }
 }

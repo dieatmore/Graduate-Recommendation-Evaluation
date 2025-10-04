@@ -26,3 +26,13 @@ token:{{ token }}
 ### 学生根据根节点id获取所有的提交信息
 GET http://localhost:8080/api/student/nodes/1421469131957137408/submits
 token:{{ token }}
+
+### 加权成绩信息提交
+POST http://localhost:8080/api/student/score
+Content-Type: application/json
+token:{{ token }}
+
+{
+  "scorex": 86.13,
+  "ranking": 3
+}

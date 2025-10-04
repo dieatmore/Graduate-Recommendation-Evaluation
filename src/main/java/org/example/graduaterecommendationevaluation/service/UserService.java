@@ -2,14 +2,13 @@ package org.example.graduaterecommendationevaluation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.graduaterecommendationevaluation.dox.Category;
+import org.example.graduaterecommendationevaluation.dox.Score;
 import org.example.graduaterecommendationevaluation.dox.User;
 import org.example.graduaterecommendationevaluation.dox.UserCategory;
+import org.example.graduaterecommendationevaluation.dto.StudentsDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
-import org.example.graduaterecommendationevaluation.repository.CategoryRepository;
-import org.example.graduaterecommendationevaluation.repository.MajorRepository;
-import org.example.graduaterecommendationevaluation.repository.UserCategoryRepository;
-import org.example.graduaterecommendationevaluation.repository.UserRepository;
+import org.example.graduaterecommendationevaluation.repository.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,7 @@ public class UserService {
     private final UserCategoryRepository userCategoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final MajorRepository majorRepository;
-    private final CategoryRepository categoryRepository;
+    private final ScoreRepository scoreRepository;
 
     // 根据account查找用户
     public User getUser(String account) {
@@ -91,5 +90,21 @@ public class UserService {
                 .majorId(user.getMajorId())
                 .build();
         userRepository.save(user1);
+    }
+
+    // 根据uid查找加权成绩信息
+    public Score getScoreByUid(Long uid) {
+        return scoreRepository.findByUserId(uid);
+    }
+
+    // 提交加权成绩信息
+    @Transactional
+    public void submitScore(Score score) {
+        scoreRepository.save(score);
+    }
+
+    // 获取学生统计信息
+    public List<StudentsDTO> getStudents(Long majorId) {
+        return userRepository.listStudents(majorId, User.STUDENT);
     }
 }

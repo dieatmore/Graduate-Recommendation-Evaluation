@@ -2,6 +2,7 @@ package org.example.graduaterecommendationevaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.graduaterecommendationevaluation.dox.Category;
+import org.example.graduaterecommendationevaluation.dox.Score;
 import org.example.graduaterecommendationevaluation.dox.TargetNode;
 import org.example.graduaterecommendationevaluation.dox.TargetSubmit;
 import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
@@ -9,6 +10,7 @@ import org.example.graduaterecommendationevaluation.dto.TargetNodeTreeDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
 import org.example.graduaterecommendationevaluation.service.TargetService;
+import org.example.graduaterecommendationevaluation.service.UserService;
 import org.example.graduaterecommendationevaluation.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class StudentController {
 
     private final TargetService targetService;
+    private final UserService userService;
 
     // 查看自己所在类别的所有根节点
     @GetMapping("nodes")
@@ -41,11 +44,10 @@ public class StudentController {
         if (children.isEmpty()) {
             return ResultVO.error(Code.ERROR, "无对应规则指标！");
         }
-        targetService.changeTree(children, parentId);
-        return ResultVO.success(children);
+        return ResultVO.success(targetService.changeTree(children, parentId));
     }
 
-    // 学生新增指标提交
+    // 学生新增指标提交 ( ToDo：是否可重复提交？限项？ )
     @PostMapping("nodes/{rootId}/submits/{nodeId}")
     public ResultVO addSubmit(@PathVariable("rootId") Long rootId,
                               @PathVariable("nodeId") Long nodeId,
@@ -89,8 +91,24 @@ public class StudentController {
         return ResultVO.success(targetService.listSubmits(rootId,uid));
     }
 
-
-
+    // 学生 提交/更改 加权成绩信息
+    @PostMapping("score")
+    public ResultVO submitScore(@RequestAttribute("uid") Long uid,
+                                @RequestBody Score score) {
+        Score s = userService.getScoreByUid(uid);
+        if(s==null){
+            score.setUserId(uid);
+            score.setStatus((short)0);
+            userService.submitScore(score);
+        } else if(s.getStatus() == 0) {
+            s.setScorex(score.getScorex());
+            s.setRanking(score.getRanking());
+            userService.submitScore(s);
+        } else {
+            return ResultVO.error(Code.ERROR, "成绩已认定，不可更改！");
+        }
+        return ResultVO.ok();
+    }
 
 
     // 学生新增文件上传

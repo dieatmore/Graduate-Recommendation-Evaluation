@@ -82,7 +82,7 @@ create table if not exists `score`
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
 
-    index (user_id)
+    unique (user_id)
 );
 
 # 指标节点表

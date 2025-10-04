@@ -4,14 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.example.graduaterecommendationevaluation.dox.Category;
 import org.example.graduaterecommendationevaluation.dox.User;
 import org.example.graduaterecommendationevaluation.exception.Code;
+import org.example.graduaterecommendationevaluation.exception.XException;
 import org.example.graduaterecommendationevaluation.repository.CategoryRepository;
 import org.example.graduaterecommendationevaluation.service.CollegeService;
 import org.example.graduaterecommendationevaluation.service.UserService;
 import org.example.graduaterecommendationevaluation.vo.ResultVO;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,6 +18,18 @@ import java.util.List;
 @RequestMapping("/api/teacher/")
 public class TeacherController {
     private final CollegeService collegeService;
+    private final UserService userService;
+
+    // 学院管理员判断类别存在(操作权限)
+    public void catExist(Long categoryId, Long collegeId) {
+        Category c = collegeService.getCatsBycolIdAndCatId(categoryId, collegeId);
+        if(c==null){
+            throw XException.builder()
+                    .number(Code.ERROR)
+                    .message("该类别不存在！")
+                    .build();
+        }
+    }
 
     // 查看自己管理的类别
     @GetMapping("categorys")
@@ -36,4 +46,26 @@ public class TeacherController {
             return ResultVO.success(ca);
         }
     }
+
+    // 查看某专业下所有学生的统计信息
+    @GetMapping("categorys/{categoryId}/majors/{majorId}/students")
+    public ResultVO listStudents(@PathVariable("categoryId") Long categoryId,
+                                 @PathVariable("majorId") Long majorId,
+                                 @RequestAttribute(value = "catsId", required = false) List<Long> catsId,
+                                 @RequestAttribute("role") String role,
+                                 @RequestAttribute("collegeId") Long collegeId) {
+        if(role.equals(User.TEACHER)){
+            if (!catsId.contains(categoryId)) {
+                return ResultVO.error(Code.ERROR, "该类别不存在！");
+            }
+            collegeService.findMajorByMidAndCatId(majorId, categoryId);
+            return ResultVO.success(userService.getStudents(majorId));
+        } else {   // 学院管理员
+            catExist(categoryId, collegeId);
+            collegeService.findMajorByMidAndCatId(majorId, categoryId);
+            return ResultVO.success(userService.getStudents(majorId));
+        }
+    }
+
+    // 给学生提交项评分
 }
