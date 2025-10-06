@@ -3,12 +3,14 @@ package org.example.graduaterecommendationevaluation.service;
 import lombok.RequiredArgsConstructor;
 import org.example.graduaterecommendationevaluation.dox.TargetNode;
 import org.example.graduaterecommendationevaluation.dox.TargetSubmit;
+import org.example.graduaterecommendationevaluation.dox.User;
 import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
 import org.example.graduaterecommendationevaluation.dto.TargetNodeTreeDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
 import org.example.graduaterecommendationevaluation.repository.TargetNodeRepository;
 import org.example.graduaterecommendationevaluation.repository.TargetSubmitRepository;
+import org.example.graduaterecommendationevaluation.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class TargetService {
     private final TargetNodeRepository targetNodeRepository;
     private final TargetSubmitRepository targetSubmitRepository;
+    private final UserRepository userRepository;
 
     // 添加指标节点信息
     @Transactional
@@ -162,5 +165,17 @@ public class TargetService {
     // 根据根节点id获取学生所有的提交信息
     public List<SubmitDTO> listSubmits(Long rootId, Long uid) {
         return targetSubmitRepository.listSubmitAndFiles(rootId, uid);
+    }
+
+    // 给提交项评分
+    @Transactional
+    public void submitMark(Long uid, TargetSubmit targetSubmit,Long submitId) {
+        User u = userRepository.findById(uid)
+                .orElseThrow(() -> XException.builder()
+                        .number(Code.ERROR)
+                        .message("不存在该用户！")
+                        .build());
+        targetSubmitRepository.submitMark(
+                submitId, u.getName(), targetSubmit.getMark(),targetSubmit.getComment(),targetSubmit.getStatus());
     }
 }

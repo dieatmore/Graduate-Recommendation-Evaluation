@@ -1,10 +1,7 @@
 package org.example.graduaterecommendationevaluation.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.graduaterecommendationevaluation.dox.Category;
-import org.example.graduaterecommendationevaluation.dox.Score;
-import org.example.graduaterecommendationevaluation.dox.User;
-import org.example.graduaterecommendationevaluation.dox.UserCategory;
+import org.example.graduaterecommendationevaluation.dox.*;
 import org.example.graduaterecommendationevaluation.dto.StudentsDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
@@ -29,6 +26,15 @@ public class UserService {
     // 根据account查找用户
     public User getUser(String account) {
         return userRepository.findByAccount(account);
+    }
+
+    // 根据id查找用户
+    public User getUserById(Long uid) {
+        return userRepository.findById(uid)
+                .orElseThrow(()-> XException.builder()
+                        .number(Code.ERROR)
+                        .message("不存在该用户！")
+                        .build());
     }
 
     // 根据用户id查看对应类别

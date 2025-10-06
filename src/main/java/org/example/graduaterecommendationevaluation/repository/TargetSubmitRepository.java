@@ -3,6 +3,7 @@ package org.example.graduaterecommendationevaluation.repository;
 import org.example.graduaterecommendationevaluation.dox.TargetSubmit;
 import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
 import org.example.graduaterecommendationevaluation.mapper.SubmitExtractor;
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
@@ -26,4 +27,26 @@ public interface TargetSubmitRepository extends ListCrudRepository<TargetSubmit,
            """,
            resultSetExtractorClass = SubmitExtractor.class)
     List<SubmitDTO> listSubmitAndFiles(Long rootId, Long uid);
+
+    @Modifying
+    @Query("""
+           
+           UPDATE target_submit ts
+           SET
+               ts.mark = :mark,
+               ts.status = :status,
+               ts.record = JSON_ARRAY_APPEND(
+                   ts.record,
+                   '$',
+                   JSON_OBJECT(
+                       'username', :name,
+                       'mark', :mark,
+                       'comment', :comment,
+                       'time', NOW()
+                   )
+               )
+           WHERE
+               ts.id = :submitId;
+           """)
+    void submitMark(Long submitId, String name, Double mark, String comment, String status);
 }

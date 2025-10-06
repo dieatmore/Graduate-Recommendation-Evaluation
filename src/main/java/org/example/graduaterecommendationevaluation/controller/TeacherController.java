@@ -2,11 +2,13 @@ package org.example.graduaterecommendationevaluation.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.graduaterecommendationevaluation.dox.Category;
+import org.example.graduaterecommendationevaluation.dox.TargetSubmit;
 import org.example.graduaterecommendationevaluation.dox.User;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
 import org.example.graduaterecommendationevaluation.repository.CategoryRepository;
 import org.example.graduaterecommendationevaluation.service.CollegeService;
+import org.example.graduaterecommendationevaluation.service.TargetService;
 import org.example.graduaterecommendationevaluation.service.UserService;
 import org.example.graduaterecommendationevaluation.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ import java.util.List;
 public class TeacherController {
     private final CollegeService collegeService;
     private final UserService userService;
+    private final TargetService targetService;
 
     // 学院管理员判断类别存在(操作权限)
     public void catExist(Long categoryId, Long collegeId) {
@@ -68,4 +71,30 @@ public class TeacherController {
     }
 
     // 给学生提交项评分
+    @PatchMapping("students/{studentId}/submits/{submitId}")
+    public ResultVO submitMark(@PathVariable("studentId") Long studentId,
+                               @PathVariable("submitId") Long submitId,
+                               @RequestAttribute(value = "catsId", required = false) List<Long> catsId,
+                               @RequestAttribute("collegeId")  Long collegeId,
+                               @RequestAttribute("uid") Long uid,
+                               @RequestAttribute("role") String role,
+                               @RequestBody TargetSubmit targetSubmit) {
+        if(role.equals(User.TEACHER)){
+            User student = userService.getUserById(studentId);
+            if(!catsId.contains(student.getCategoryId())) {
+                return ResultVO.error(Code.FORBIDDEN);
+            }
+        } else {    // 学院管理员
+            User student = userService.getUserById(studentId);
+            if(!collegeId.equals(student.getCollegeId())) {
+                return ResultVO.error(Code.FORBIDDEN);
+            }
+        }
+        TargetSubmit ts = targetService.getSubmitById(submitId);
+        if(!ts.getUserId().equals(studentId)) {
+            return ResultVO.error(Code.FORBIDDEN);
+        }
+        targetService.submitMark(uid, targetSubmit,submitId);
+        return ResultVO.ok();
+    }
 }

@@ -5,3 +5,14 @@ token:{{ token }}
 ### 查看某专业下所有学生的统计信息
 GET http://localhost:8080/api/teacher/categorys/1421433267587706880/majors/1421438941696684032/students
 token:{{ token }}
+
+### 加权成绩信息提交
+PATCH http://localhost:8080/api/teacher/students/1421465359751114752/submits/1423600517556006912
+Content-Type: application/json
+token:{{ token }}
+
+{
+  "mark": 50.00,
+  "status": "59G7",
+  "comment": "已认定该成绩为满分！"
+}
