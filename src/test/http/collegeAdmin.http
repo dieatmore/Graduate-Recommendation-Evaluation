@@ -27,12 +27,12 @@ DELETE http://localhost:8080/api/collegeadmin/categorys/1421433291616874496
 token:{{ token }}
 
 ### 添加专业
-POST http://localhost:8080/api/collegeadmin/categorys/1421433267587706880/majors
+POST http://localhost:8080/api/collegeadmin/categorys/1421433330103808000/majors
 token:{{ token }}
 Content-Type: application/json
 
 {
-  "name": "test"
+  "name": "通信工程"
 }
 
 ### 查看专业

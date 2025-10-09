@@ -107,7 +107,7 @@ public class CollegeService {
         majorRepository.save(major);
     }
 
-    // 查看所有专业
+    // 根据类别查看所有专业
     public List<Major> listMajors(Long catId) {
         return majorRepository.findByCategoryId(catId);
     }

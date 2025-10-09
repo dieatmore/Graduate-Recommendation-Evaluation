@@ -4,7 +4,7 @@ token:{{ token }}
 Content-Type: application/json
 
 {
-  "name": "test学院"
+  "name": "文法学院"
 }
 
 ### 查看学院

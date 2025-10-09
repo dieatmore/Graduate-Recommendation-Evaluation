@@ -11,6 +11,10 @@ Content-Type: application/json
   "majorId": 1421438941696684032
 }
 
+### 查看所有学院和专业
+GET http://localhost:8080/api/open/register/collegesmajors
+token:{{ token }}
+
 ### 查看指标根节点
 GET http://localhost:8080/api/student/nodes
 token:{{ token }}

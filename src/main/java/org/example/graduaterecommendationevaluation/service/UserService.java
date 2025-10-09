@@ -84,7 +84,6 @@ public class UserService {
                     .build();
         }
 
-        Long catId = majorRepository.findCategoryIdById(user.getMajorId());
         User user1 = User.builder()
                 .account(user.getAccount())
                 .password(passwordEncoder.encode(user.getPassword()))
@@ -92,7 +91,7 @@ public class UserService {
                 .role(User.STUDENT)
                 .phone(user.getPhone())
                 .collegeId(user.getCollegeId())
-                .categoryId(catId)
+                .categoryId(user.getCategoryId())
                 .majorId(user.getMajorId())
                 .build();
         userRepository.save(user1);

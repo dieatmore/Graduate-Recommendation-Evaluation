@@ -4,17 +4,21 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.graduaterecommendationevaluation.component.JWTComponent;
+import org.example.graduaterecommendationevaluation.dox.Category;
+import org.example.graduaterecommendationevaluation.dox.College;
+import org.example.graduaterecommendationevaluation.dox.Major;
 import org.example.graduaterecommendationevaluation.dox.User;
+import org.example.graduaterecommendationevaluation.dto.CollegeMajorDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
+import org.example.graduaterecommendationevaluation.service.CollegeService;
 import org.example.graduaterecommendationevaluation.service.UserService;
 import org.example.graduaterecommendationevaluation.vo.ResultVO;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -23,6 +27,7 @@ import java.util.Map;
 @RequestMapping("/api/open/")
 public class OpenController {
 
+    private final CollegeService collegeService;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JWTComponent jwtComponent;
@@ -55,9 +60,35 @@ public class OpenController {
         return ResultVO.success(userR);
     }
 
+    // 学生注册
     @PostMapping("register")
     public ResultVO addStudent(@RequestBody User user) {
         userService.addStudent(user);
         return ResultVO.ok();
+    }
+
+    // 获取学院
+    @GetMapping("register/collegesmajors")
+    public ResultVO listCollegesAndMajors() {
+        List<College> allColleges = collegeService.listColleges();
+        List<CollegeMajorDTO> resultList = new ArrayList<>();
+        for (College college : allColleges) {
+            CollegeMajorDTO dto = CollegeMajorDTO.builder()
+                    .id(college.getId())
+                    .name(college.getName())
+                    .build();
+
+            List<Category> categories = collegeService.getCategorysBycolId(college.getId());
+            List<Major> majorsByCol = new ArrayList<>();
+            for (Category category : categories) {
+                List<Major> majorsByCat =  collegeService.listMajors(category.getId());
+                if(!majorsByCat.isEmpty()) {
+                    majorsByCol.addAll(majorsByCat);
+                }
+            }
+            dto.setMajors(majorsByCol);
+            resultList.add(dto);
+        }
+        return ResultVO.success(resultList);
     }
 }
