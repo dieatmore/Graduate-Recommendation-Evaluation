@@ -3,6 +3,7 @@ package org.example.graduaterecommendationevaluation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.graduaterecommendationevaluation.dox.*;
+import org.example.graduaterecommendationevaluation.dto.CollegeAdminDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
 import org.example.graduaterecommendationevaluation.repository.*;
@@ -10,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,6 +33,18 @@ public class CollegeService {
     // 查看所有学院
     public List<College> listColleges() {
         return collegeRepository.findAll();
+    }
+
+    // 超级管理员查看所有学院和学院管理员
+    public List<CollegeAdminDTO> listCollegesAndColAdmin() {
+        List<College> colleges = collegeRepository.findAll();
+        return colleges.stream()
+                .map(college -> CollegeAdminDTO.builder()
+                        .id(college.getId())
+                        .name(college.getName())
+                        .users(userRepository.findByCollegeIdAndRole(college.getId(), User.COLLAGE_ADMIN))
+                        .build())
+                .toList();
     }
 
     // 查找学院
@@ -154,5 +168,16 @@ public class CollegeService {
                         .number(Code.ERROR)
                         .message("不存在该类别！")
                         .build());
+    }
+
+    // 根据学院名称搜索
+    public List<CollegeAdminDTO> searchByName(String name) {
+        return collegeRepository.findByNameContaining(name).stream()
+                .map(college -> CollegeAdminDTO.builder()
+                        .id(college.getId())
+                        .name(college.getName())
+                        .users(userRepository.findByCollegeIdAndRole(college.getId(), User.COLLAGE_ADMIN))
+                        .build())
+                .toList();
     }
 }

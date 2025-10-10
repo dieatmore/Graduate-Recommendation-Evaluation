@@ -48,6 +48,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void deleteUser(Long uid) {
+        userRepository.deleteById(uid);
+    }
+
     // id判断用户是否存在
     public void  judgeUser(Long id) {
         if(userRepository.findById(id).isEmpty()) {

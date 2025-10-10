@@ -7,18 +7,18 @@ Content-Type: application/json
   "name": "文法学院"
 }
 
-### 查看学院
-GET http://localhost:8080/api/admin/colleges
+### 查看学院和学院管理员
+GET http://localhost:8080/api/admin/collegesadmin
 token:{{ token }}
 Content-Type: application/json
 
 ### 修改学院
-PATCH http://localhost:8080/api/admin/colleges/1421418080923086144
+PATCH http://localhost:8080/api/admin/colleges/1426093584267669504
 token:{{ token }}
 Content-Type: application/json
 
 {
-  "name": "土木学院"
+  "name": "111学院"
 }
 
 ### 删除学院
@@ -31,6 +31,6 @@ token:{{ token }}
 Content-Type: application/json
 
 {
-  "account": "1025212926",
-  "name": "计控管理员"
+  "account": "1025218627",
+  "name": "计控管理员2"
 }

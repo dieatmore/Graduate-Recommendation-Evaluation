@@ -37,6 +37,12 @@ public class CollegeAdminController {
         }
     }
 
+    // 获取自己的学院
+    @GetMapping("college")
+    public ResultVO getCollege(@RequestAttribute("collegeId") Long collegeId) {
+        return ResultVO.success(collegeService.getCollege(collegeId));
+    }
+
     // 添加类别
     @PostMapping("categorys")
     public ResultVO addCategory(@RequestBody Category category,
@@ -181,5 +187,27 @@ public class CollegeAdminController {
         catExist(catId, collegeId);
         List<TargetNodeTreeDTO> t = targetService.listTargetNodeTree(catId);
         return ResultVO.success(t);
+    }
+
+    // 修改密码
+    @PatchMapping("password")
+    public ResultVO updatePassword(@RequestBody User user,
+                                   @RequestAttribute("uid") Long uid) {
+        User u = userService.getUserById(uid);
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.addUser(u);
+        return ResultVO.ok();
+    }
+
+    // 修改信息
+    @PatchMapping("userinfo")
+    public ResultVO updateUserInfo(@RequestBody User user,
+                                   @RequestAttribute("uid") Long uid) {
+        User u = userService.getUserById(uid);
+        u.setAccount(user.getAccount());
+        u.setName(user.getName());
+        u.setPhone(user.getPhone());
+        userService.addUser(u);
+        return ResultVO.success(u);
     }
 }

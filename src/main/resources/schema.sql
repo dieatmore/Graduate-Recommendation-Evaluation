@@ -15,6 +15,7 @@ create table if not exists `user`
     update_time datetime         not null default current_timestamp on update current_timestamp,
 
     unique (account),
+    index (college_id) ,
     index (category_id) ,
     index (major_id)
 );

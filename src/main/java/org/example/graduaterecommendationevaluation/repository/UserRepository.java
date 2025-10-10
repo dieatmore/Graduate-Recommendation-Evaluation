@@ -47,4 +47,9 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
                s.ranking
            """)
     List<StudentsDTO> listStudents(Long majorId, String role);
+
+    @Query("""
+           select * from user u where u.role = :role and u.college_id = :id 
+           """)
+    List<User> findByCollegeIdAndRole(Long id, String role);
 }

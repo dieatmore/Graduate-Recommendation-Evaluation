@@ -23,10 +23,10 @@ public class AdminController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    // 查看所有学院
-    @GetMapping("colleges")
-    public ResultVO listColleges(){
-        return ResultVO.success(collegeService.listColleges());
+    // 查看所有学院和学院管理员
+    @GetMapping("collegesadmins")
+    public ResultVO listCollegesadmin(){
+        return ResultVO.success(collegeService.listCollegesAndColAdmin());
     }
 
     // 添加学院
@@ -56,8 +56,7 @@ public class AdminController {
     // 添加学院管理员
     @PostMapping("colleges/{collegeId}")
     public ResultVO addCollegeAdmin(@PathVariable Long collegeId,
-                                    @RequestBody User user,
-                                    @RequestAttribute("role")  String role) {
+                                    @RequestBody User user) {
         collegeService.getCollege(collegeId);
         if(userService.getUser(user.getAccount()) != null) {
             return ResultVO.error(Code.ERROR, "该用户已存在！");
@@ -71,5 +70,55 @@ public class AdminController {
                 .build();
         userService.addUser(u);
         return ResultVO.ok();
+    }
+
+    // 编辑学院管理员
+    @PatchMapping("users/{uid}")
+    public ResultVO updateCollegeAdmin(@PathVariable Long uid,
+                                       @RequestBody User user) {
+        User u = userService.getUserById(uid);
+        if(userService.getUser(user.getAccount()) != null) {
+            return ResultVO.error(Code.ERROR, "该账号已存在！");
+        }
+        u.setAccount(user.getAccount());
+        u.setName(user.getName());
+        userService.addUser(u);
+        return ResultVO.ok();
+    }
+
+    // 删除学院管理员
+    @DeleteMapping("users/{uid}")
+    public ResultVO deleteCollegeAdmin(@PathVariable Long uid) {
+        userService.getUserById(uid);
+        userService.deleteUser(uid);
+        return ResultVO.ok();
+    }
+
+    // 根据学院名称查找学院
+    @GetMapping("collegesadmins/{name}")
+    public ResultVO findCollegeByname(@PathVariable String name) {
+        return ResultVO.success(collegeService.searchByName(name));
+    }
+
+    // 修改密码
+    @PatchMapping("password")
+    public ResultVO updatePassword(@RequestBody User user,
+                                   @RequestAttribute("uid") Long uid) {
+        User u = userService.getUserById(uid);
+        u.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.addUser(u);
+        return ResultVO.ok();
+    }
+
+    // 修改信息
+    @PatchMapping("userinfo")
+    public ResultVO updateUserInfo(@RequestBody User user,
+                                   @RequestAttribute("uid") Long uid) {
+        User u = userService.getUserById(uid);
+        u.setAccount(user.getAccount());
+        u.setName(user.getName());
+        u.setPhone(user.getPhone());
+        userService.addUser(u);
+        return ResultVO.success(u);
     }
 }
