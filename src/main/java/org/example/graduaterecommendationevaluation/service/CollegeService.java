@@ -93,7 +93,7 @@ public class CollegeService {
 
     // 修改类别
     @Transactional
-    public void updateCategory(Category c,Category category) {
+    public void updateCategory(Category c) {
         categoryRepository.save(c);
     }
 

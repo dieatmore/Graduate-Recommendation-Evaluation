@@ -93,6 +93,12 @@ public class TargetService {
                 .build();
     }
 
+    // 删除List规则节点
+    @Transactional
+    public void deleteTargetNodes(List<TargetNode> targetNodes) {
+        targetNodeRepository.deleteAll(targetNodes);
+    }
+
     // 学生查看自己所在类别的根节点
     public List<TargetNode> listRootNodes(Long catId) {
         List<TargetNode> allNodes = targetNodeRepository.findRootByCategoryId(catId);

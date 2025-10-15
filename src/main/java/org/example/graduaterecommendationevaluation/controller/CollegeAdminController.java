@@ -56,9 +56,6 @@ public class CollegeAdminController {
     @GetMapping("categorys")
     public ResultVO listCategories(@RequestAttribute("collegeId") Long collegeId){
         List<Category> ca = collegeService.getCategorysBycolId(collegeId);
-        if(ca.isEmpty()) {
-            return ResultVO.error(Code.ERROR, "该用户没有管理的类别！");
-        }
         return ResultVO.success(ca);
     }
 
@@ -71,7 +68,7 @@ public class CollegeAdminController {
         Category c = collegeService.getCatById(categoryId);
         c.setName(category.getName());
         c.setWeight(category.getWeight());
-        collegeService.updateCategory(c, category);
+        collegeService.updateCategory(c);
         return ResultVO.ok();
     }
 
@@ -169,8 +166,8 @@ public class CollegeAdminController {
         return ResultVO.ok();
     }
 
-    // 添加指标节点
-    @PostMapping("targetnode/{catId}")
+    // 添加/修改指标节点
+    @PostMapping("categorys/{catId}/targetnodes")
     public ResultVO addTargetNode(@PathVariable Long catId,
                                   @RequestBody TargetNode targetNode,
                                   @RequestAttribute("collegeId") Long collegeId) {
@@ -180,13 +177,38 @@ public class CollegeAdminController {
         return ResultVO.ok();
     }
 
+    // 拖拽更新指标节点
+    @PatchMapping("categorys/{catId}/targetnodes/{nodeId}")
+    public ResultVO updateTargetNodeByDrag(@PathVariable("catId") Long catId,
+                                           @PathVariable("nodeId") Long nodeId,
+                                           @RequestBody Long parentNode,
+                                           @RequestAttribute("collegeId") Long collegeId) {
+        catExist(catId, collegeId);
+        TargetNode node = targetService.getNodeById(nodeId);
+        node.setParentId(parentNode);
+        targetService.addTargetNode(node);
+        return ResultVO.ok();
+    }
+
     // 查看指标节点
-    @GetMapping("targetnode/{catId}")
+    @GetMapping("categorys/{catId}/targetnodes")
     public ResultVO listTargetNodes(@PathVariable Long catId,
                                     @RequestAttribute("collegeId") Long collegeId) {
         catExist(catId, collegeId);
         List<TargetNodeTreeDTO> t = targetService.listTargetNodeTree(catId);
         return ResultVO.success(t);
+    }
+
+    // 删除指标节点几所有子节点
+    @DeleteMapping("categorys/{catId}/targetnodes/{nodeId}")
+    public ResultVO deleteTargetNode(@PathVariable("catId") Long catId,
+                                     @PathVariable("nodeId") Long nodeId,
+                                     @RequestAttribute("collegeId") Long collegeId) {
+        catExist(catId, collegeId);
+        List<TargetNode> children = targetService.listChildrenNodes(catId, nodeId);
+        children.add(targetService.getNodeById(nodeId));
+        targetService.deleteTargetNodes(children);
+        return ResultVO.ok();
     }
 
     // 修改密码
