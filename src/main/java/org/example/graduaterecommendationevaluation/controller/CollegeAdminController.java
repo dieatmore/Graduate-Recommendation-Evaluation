@@ -93,6 +93,12 @@ public class CollegeAdminController {
         return ResultVO.ok();
     }
 
+    // 查看学院下所有类别对应专业
+    @GetMapping("categorys/catmajors")
+    public ResultVO listCatMajors(@RequestAttribute("collegeId") Long collegeId ) {
+        return ResultVO.success(collegeService.catMajors(collegeId));
+    }
+
     // 查看所有专业
     @GetMapping("categorys/{catId}/majors")
     public ResultVO listMajors(@RequestAttribute("collegeId") Long collegeId,
@@ -143,12 +149,50 @@ public class CollegeAdminController {
         return ResultVO.ok();
     }
 
+    // 修改导师
+    @PatchMapping("teachers/{teacherId}/info")
+    public ResultVO updateUser(@RequestAttribute("collegeId") Long collegeId,
+                               @PathVariable("teacherId") Long teacherId,
+                               @RequestBody User teacher) {
+        userService.judgeUser(teacherId);
+        User user = userService.getUserById(teacherId);
+        if(!collegeId.equals(user.getCollegeId())) {
+            return ResultVO.error(Code.FORBIDDEN);
+        }
+        user.setAccount(teacher.getAccount());
+        user.setName(teacher.getName());
+        userService.addUser(user);
+        return ResultVO.ok();
+    }
+
+    // 删除导师
+    @DeleteMapping("teachers/{teacherId}")
+    public ResultVO deleteUser(@PathVariable Long teacherId,
+                               @RequestAttribute("collegeId") Long collegeId) {
+        User user = userService.getUserById(teacherId);
+        if(!collegeId.equals(user.getCollegeId())) {
+            return ResultVO.error(Code.FORBIDDEN);
+        }
+        userService.deleteUser(teacherId);
+        return ResultVO.ok();
+    }
+
+    // 查看导师以及其管理的类别
+    @GetMapping("teachers")
+    public ResultVO getTeachers(@RequestAttribute("collegeId") Long collegeId){
+        return ResultVO.success(userService.getTeacherCats(collegeId));
+    }
+
     // 给指定导师分配类别
     @PatchMapping("teachers/{teacherId}")
     public ResultVO shareCategorys(@PathVariable Long teacherId,
                                    @RequestBody List<Long> catsId,
                                    @RequestAttribute("collegeId") Long collegeId) {
         userService.judgeUser(teacherId);
+        User user = userService.getUserById(teacherId);
+        if(!collegeId.equals(user.getCollegeId())) {
+            return ResultVO.error(Code.FORBIDDEN);
+        }
         if (!catsId.isEmpty()) {
             List<Category> categories = collegeService.findCatsId(catsId);
             if (categories.size() != catsId.size()) {

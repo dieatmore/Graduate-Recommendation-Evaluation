@@ -3,6 +3,7 @@ package org.example.graduaterecommendationevaluation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.graduaterecommendationevaluation.dox.*;
+import org.example.graduaterecommendationevaluation.dto.CategoryMajorsDTO;
 import org.example.graduaterecommendationevaluation.dto.CollegeAdminDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
@@ -179,5 +180,21 @@ public class CollegeService {
                         .users(userRepository.findByCollegeIdAndRole(college.getId(), User.COLLAGE_ADMIN))
                         .build())
                 .toList();
+    }
+
+    // 获取学院下所有类别关系
+    public  List<CategoryMajorsDTO> catMajors(Long collegeId) {
+        List<Category> cats = categoryRepository.findByCollegeId(collegeId);
+        List<CategoryMajorsDTO> catMajors = new ArrayList<>();
+        cats.forEach(cat -> {
+            List<Major> majors = majorRepository.findByCategoryId(cat.getId());
+            CategoryMajorsDTO dto = CategoryMajorsDTO.builder()
+                    .id(cat.getId())
+                    .categoryName(cat.getName())
+                    .majors(majors)
+                    .build();
+            catMajors.add(dto);
+        });
+        return catMajors;
     }
 }

@@ -3,6 +3,7 @@ package org.example.graduaterecommendationevaluation.service;
 import lombok.RequiredArgsConstructor;
 import org.example.graduaterecommendationevaluation.dox.*;
 import org.example.graduaterecommendationevaluation.dto.StudentsDTO;
+import org.example.graduaterecommendationevaluation.dto.TeacherCatDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
 import org.example.graduaterecommendationevaluation.repository.*;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final MajorRepository majorRepository;
     private final ScoreRepository scoreRepository;
+    private final CategoryRepository categoryRepository;
 
     // 根据account查找用户
     public User getUser(String account) {
@@ -116,5 +119,23 @@ public class UserService {
     // 获取学生统计信息
     public List<StudentsDTO> getStudents(Long majorId) {
         return userRepository.listStudents(majorId, User.STUDENT);
+    }
+
+    // 查看导师及其管理的类别
+    public List<TeacherCatDTO> getTeacherCats(Long collegeId) {
+        List<User> teachers = userRepository.findByCollegeIdAndRole(collegeId, User.TEACHER);
+        List<TeacherCatDTO> teaCats = new ArrayList<>();
+        teachers.forEach(teacher -> {
+            List<Long> catIds = userCategoryRepository.findCategoryIdByUserId(teacher.getId());
+            List<Category> cats = categoryRepository.findAllById(catIds);
+            TeacherCatDTO dto = TeacherCatDTO.builder()
+                    .id(teacher.getId())
+                    .account(teacher.getAccount())
+                    .name(teacher.getName())
+                    .categorys(cats)
+                    .build();
+            teaCats.add(dto);
+        });
+        return teaCats;
     }
 }
