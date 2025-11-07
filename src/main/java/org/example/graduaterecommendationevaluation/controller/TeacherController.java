@@ -70,6 +70,46 @@ public class TeacherController {
         }
     }
 
+    // 查看某个学生的个人信息
+    @GetMapping("students/{studentId}/info")
+    private ResultVO studentInfo(@PathVariable("studentId") Long studentId,
+                                 @RequestAttribute(value = "catsId", required = false) List<Long> catsId,
+                                 @RequestAttribute("collegeId")  Long collegeId,
+                                 @RequestAttribute("role") String role) {
+        if(role.equals(User.TEACHER)){
+            User student = userService.getUserById(studentId);
+            if(!catsId.contains(student.getCategoryId())) {
+                return ResultVO.error(Code.FORBIDDEN);
+            }
+        } else {
+            User student = userService.getUserById(studentId);
+            if(!collegeId.equals(student.getCollegeId())) {
+                return ResultVO.error(Code.FORBIDDEN);
+            }
+        }
+        return ResultVO.success(userService.getUserInfo(studentId));
+    }
+
+    // 查看某个学生的具体信息
+    @GetMapping("students/{studentId}")
+    public ResultVO studentDetail(@PathVariable("studentId") Long studentId,
+                                  @RequestAttribute(value = "catsId", required = false) List<Long> catsId,
+                                  @RequestAttribute("collegeId")  Long collegeId,
+                                  @RequestAttribute("role") String role) {
+        if(role.equals(User.TEACHER)){
+            User student = userService.getUserById(studentId);
+            if(!catsId.contains(student.getCategoryId())) {
+                return ResultVO.error(Code.FORBIDDEN);
+            }
+        } else {
+            User student = userService.getUserById(studentId);
+            if(!collegeId.equals(student.getCollegeId())) {
+                return ResultVO.error(Code.FORBIDDEN);
+            }
+        }
+        return ResultVO.success(userService.getStudentDetail(studentId));
+    }
+
     // 给学生提交项评分
     @PatchMapping("students/{studentId}/submits/{submitId}")
     public ResultVO submitMark(@PathVariable("studentId") Long studentId,

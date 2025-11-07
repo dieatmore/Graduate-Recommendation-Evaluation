@@ -47,6 +47,25 @@ public class StudentController {
         return ResultVO.success(targetService.changeTree(children, parentId));
     }
 
+    // 学生删除已提交状态的指标提交
+    @DeleteMapping("nodes/{rootId}/submits/{submitId}")
+    public ResultVO deleteNode(@PathVariable("rootId") Long rootId,
+                               @PathVariable("submitId") Long submitId,
+                               @RequestAttribute("catId") Long catId,
+                               @RequestAttribute("uid") Long uid) {
+        targetService.judgeNode(rootId, catId);
+        targetService.judgeRoot(rootId);
+        TargetSubmit ts = targetService.getSubmitById(submitId);
+        if(!ts.getUserId().equals(uid)){
+            return ResultVO.error(Code.ERROR, "该节点不存在！");
+        }
+        if(!ts.getStatus().equals(TargetSubmit.SUBMIT)) {
+            return ResultVO.error(Code.ERROR, "该节点不可删除！");
+        }
+        targetService.deleteSubmit(ts);
+        return ResultVO.ok();
+    }
+
     // 学生新增指标提交 ( ToDo：是否可重复提交？限项？ )
     @PostMapping("nodes/{rootId}/submits/{nodeId}")
     public ResultVO addSubmit(@PathVariable("rootId") Long rootId,

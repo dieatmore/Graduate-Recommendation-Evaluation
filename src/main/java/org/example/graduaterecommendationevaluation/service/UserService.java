@@ -2,7 +2,9 @@ package org.example.graduaterecommendationevaluation.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.graduaterecommendationevaluation.dox.*;
+import org.example.graduaterecommendationevaluation.dto.StudentInfoDTO;
 import org.example.graduaterecommendationevaluation.dto.StudentsDTO;
+import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
 import org.example.graduaterecommendationevaluation.dto.TeacherCatDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
@@ -14,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -137,5 +138,15 @@ public class UserService {
             teaCats.add(dto);
         });
         return teaCats;
+    }
+
+    // 查看某个学生具体信息
+    public List<SubmitDTO> getStudentDetail(Long uid) {
+        return userRepository.studentDetail(uid);
+    }
+
+    // 查看某个学生info信息
+    public StudentInfoDTO getUserInfo(Long uid) {
+        return userRepository.getInfoById(uid);
     }
 }

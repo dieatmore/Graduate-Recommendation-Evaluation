@@ -48,7 +48,9 @@ public class SubmitExtractor implements ResultSetExtractor<List<SubmitDTO>> {
                         .id(fileId)
                         .fileName(fileName)
                         .build();
-                submitDTO.getFiles().add(fileDTO);
+                if (submitDTO != null) {
+                    submitDTO.getFiles().add(fileDTO);
+                }
             }
         }
         return new ArrayList<>(submitDtoMap.values());

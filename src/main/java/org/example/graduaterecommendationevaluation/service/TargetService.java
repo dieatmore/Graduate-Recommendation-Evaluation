@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.graduaterecommendationevaluation.dox.TargetNode;
 import org.example.graduaterecommendationevaluation.dox.TargetSubmit;
 import org.example.graduaterecommendationevaluation.dox.User;
+import org.example.graduaterecommendationevaluation.dto.FileDTO;
 import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
 import org.example.graduaterecommendationevaluation.dto.TargetNodeTreeDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
@@ -157,6 +158,12 @@ public class TargetService {
     @Transactional
     public void addSubmit(TargetSubmit targetSubmit) {
         targetSubmitRepository.save(targetSubmit);
+    }
+
+    // 删除提交节点（submit）
+    @Transactional
+    public void deleteSubmit(TargetSubmit targetSubmit) {
+        targetSubmitRepository.delete(targetSubmit);
     }
 
     // 根据id获取指标提交信息
