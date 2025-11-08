@@ -42,7 +42,7 @@ public class StudentController {
         targetService.judgeNode(parentId, catId);
         List<TargetNode> children = targetService.listChildrenNodes(catId, parentId);
         if (children.isEmpty()) {
-            return ResultVO.error(Code.ERROR, "无对应规则指标！");
+            return ResultVO.success("暂无数据！");
         }
         return ResultVO.success(targetService.changeTree(children, parentId));
     }

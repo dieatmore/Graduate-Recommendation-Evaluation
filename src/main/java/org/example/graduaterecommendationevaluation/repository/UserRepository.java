@@ -64,17 +64,19 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
                   ts.mark as ts_mark,
                   ts.comment as ts_comment,
                   ts.record as ts_record,
+                  tn.max_mark as max_mark,
                   sf.id as sf_id,
                   sf.filename as sf_filename
            from target_submit ts
-               left join submit_file sf on ts.id = sf.target_submit_id
+           left join submit_file sf on ts.id = sf.target_submit_id
+           left join target_node tn on ts.target_node_id = tn.id
            where ts.user_id = :uid
            """,
             resultSetExtractorClass = SubmitExtractor.class)
     List<SubmitDTO> studentDetail(Long uid);
 
     @Query("""
-           select u.id, u.name, u.phone, u.account, s.scorex, s.ranking,s.status
+           select u.id, u.name, u.phone, u.account,u.major_id, s.scorex, s.ranking,s.status
            from user u
            left join score s on u.id = s.user_id
            where u.id = :uid

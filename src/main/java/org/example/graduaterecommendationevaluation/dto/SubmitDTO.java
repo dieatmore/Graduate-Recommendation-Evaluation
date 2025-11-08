@@ -16,6 +16,7 @@ public class SubmitDTO {
     private String name;
     private String status;
     private Double mark;
+    private Double maxMark;
     private List<FileDTO> files;
     private String comment;
     private String record;

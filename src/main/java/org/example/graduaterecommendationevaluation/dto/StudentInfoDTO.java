@@ -17,4 +17,5 @@ public class StudentInfoDTO {
     private Double scorex;
     private Short ranking;
     private String status;
+    private Long majorId;
 }

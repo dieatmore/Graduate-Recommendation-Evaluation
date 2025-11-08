@@ -21,6 +21,7 @@ public class SubmitExtractor implements ResultSetExtractor<List<SubmitDTO>> {
             String submitName = rs.getString("ts_name");
             String status = rs.getString("ts_status");
             Double mark = rs.getDouble("ts_mark");
+            Double maxMark = rs.getDouble("max_mark");
             if (rs.wasNull()) {
                 mark = null;
             }
@@ -37,6 +38,7 @@ public class SubmitExtractor implements ResultSetExtractor<List<SubmitDTO>> {
                         .name(submitName)
                         .status(status)
                         .mark(mark)
+                        .maxMark(maxMark)
                         .files(new ArrayList<>())
                         .comment(comment)
                         .record(record)
