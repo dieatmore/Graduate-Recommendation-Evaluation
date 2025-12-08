@@ -9,10 +9,12 @@ import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
 import org.example.graduaterecommendationevaluation.dto.TargetNodeTreeDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
+import org.example.graduaterecommendationevaluation.service.FileService;
 import org.example.graduaterecommendationevaluation.service.TargetService;
 import org.example.graduaterecommendationevaluation.service.UserService;
 import org.example.graduaterecommendationevaluation.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +26,7 @@ public class StudentController {
 
     private final TargetService targetService;
     private final UserService userService;
+    private final FileService fileService;
 
     // 查看自己所在类别的所有根节点
     @GetMapping("nodes")
@@ -131,13 +134,27 @@ public class StudentController {
 
 
     // 学生新增文件上传
-//    @PostMapping("file/{submitNodeId}")
-//    public ResultVO addFile(@PathVariable("submitNodeId") Long submitNodeId,
-//                            @RequestAttribute("uid") Long uid) {
-//        TargetSubmit thisSubmit = targetService.getSubmitById(submitNodeId);
-//        if(!uid.equals(thisSubmit.getUserId())) {
-//            return ResultVO.error(Code.ERROR, "不存在该节点！");
-//        }
-//    }
+    @PostMapping("submit-file/upload/{targetSubmitId}")
+    public ResultVO addFile(@PathVariable("targetSubmitId") Long targetSubmitId,
+                            MultipartFile file,
+                            @RequestAttribute("uid")  Long uid) {
+        if (targetSubmitId == null || file == null || uid == null) {
+            return ResultVO.error(Code.ERROR, "参数异常！");
+        }
+        try {
+            fileService.uploadFile(targetSubmitId, file, uid);
+            return ResultVO.ok();
+        } catch (Exception e) {
+            return ResultVO.error(Code.ERROR, "文件上传失败！");
+        }
+    }
 
+    // 学生删除佐证文件
+    @DeleteMapping("submit-file/{fileId}")
+    public ResultVO deleteFile(@PathVariable("fileId") Long fileId) {
+        fileService.deleteFile(fileId);
+        return ResultVO.ok();
+    }
+
+    // 学生打开文件
 }

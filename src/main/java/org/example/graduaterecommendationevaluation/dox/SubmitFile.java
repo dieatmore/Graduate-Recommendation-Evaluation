@@ -19,7 +19,7 @@ public class SubmitFile {
     @CreatedBy
     private Long id;
     private Long targetSubmitId;
-    private String fileName;
+    private String filename;
     private String path;
 
     @ReadOnlyProperty

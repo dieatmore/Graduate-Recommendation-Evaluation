@@ -47,6 +47,7 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
              and u.role = :role
            group by u.id, u.name, u.account, s.scorex, s.ranking, s.status
            order by
+               case when s.ranking is not null then 0 else 1 end,
                case when s.status = 1 then 0 else 1 end,
                s.ranking
            """)

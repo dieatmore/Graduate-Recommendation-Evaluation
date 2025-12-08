@@ -4,17 +4,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.graduaterecommendationevaluation.component.JWTComponent;
-import org.example.graduaterecommendationevaluation.dox.Category;
-import org.example.graduaterecommendationevaluation.dox.College;
-import org.example.graduaterecommendationevaluation.dox.Major;
-import org.example.graduaterecommendationevaluation.dox.User;
+import org.example.graduaterecommendationevaluation.dox.*;
 import org.example.graduaterecommendationevaluation.dto.CollegeMajorDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.service.CollegeService;
+import org.example.graduaterecommendationevaluation.service.FileService;
 import org.example.graduaterecommendationevaluation.service.UserService;
 import org.example.graduaterecommendationevaluation.vo.ResultVO;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +30,8 @@ public class OpenController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JWTComponent jwtComponent;
+    private final FileService fileService;
+
     @PostMapping("login")
     public ResultVO login(@RequestBody User user, HttpServletResponse response) {
         User userR = userService.getUser(user.getAccount());
@@ -90,5 +91,18 @@ public class OpenController {
             resultList.add(dto);
         }
         return ResultVO.success(resultList);
+    }
+
+    // 打开材料
+    @GetMapping("openfile/{fileId}")
+    public ResultVO openFile(@PathVariable("fileId") Long fileId,
+                             HttpServletResponse response) {
+        SubmitFile sf = fileService.existFile(fileId);
+        try {
+            fileService.openFile(sf,response);
+            return ResultVO.ok();
+        } catch (Exception e) {
+            return ResultVO.error(Code.ERROR, "打开文件失败！");
+        }
     }
 }

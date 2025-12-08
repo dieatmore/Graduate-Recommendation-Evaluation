@@ -1,5 +1,7 @@
 mysql-account: 2022212916
 spring:
+  profiles:
+    active: dev
   datasource:
     url: 'jdbc:mysql://120.46.159.231:3306/${mysql-account}?createDatabaseIfNotExist=true'
     username: ${mysql-account}

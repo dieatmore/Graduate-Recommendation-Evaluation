@@ -92,6 +92,15 @@ public class CollegeService {
         return categoryRepository.findByIdAndCollegeId(categoryId, collegeId);
     }
 
+    // 根据类别id获取类别
+    public Category getCategory(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(()-> XException.builder()
+                        .number(Code.ERROR)
+                        .message("不存在该类别！")
+                        .build());
+    }
+
     // 修改类别
     @Transactional
     public void updateCategory(Category c) {
@@ -137,6 +146,15 @@ public class CollegeService {
                     .build();
         }
         return m;
+    }
+
+    // 根据id获取专业
+    public Major getMajor(Long majorId) {
+        return majorRepository.findById(majorId)
+                .orElseThrow(()-> XException.builder()
+                        .number(Code.ERROR)
+                        .message("不存在该专业！")
+                        .build());
     }
 
     // 修改专业
