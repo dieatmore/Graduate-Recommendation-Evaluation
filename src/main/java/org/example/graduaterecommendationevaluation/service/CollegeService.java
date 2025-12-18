@@ -3,8 +3,10 @@ package org.example.graduaterecommendationevaluation.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.graduaterecommendationevaluation.dox.*;
+import org.example.graduaterecommendationevaluation.dto.CategoryDTO;
 import org.example.graduaterecommendationevaluation.dto.CategoryMajorsDTO;
 import org.example.graduaterecommendationevaluation.dto.CollegeAdminDTO;
+import org.example.graduaterecommendationevaluation.dto.WeightDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
 import org.example.graduaterecommendationevaluation.repository.*;
@@ -78,8 +80,8 @@ public class CollegeService {
 
     // 创建类别
     @Transactional
-    public void addCategory(Category category) {
-        categoryRepository.save(category);
+    public void addCategory(Category cat) {
+        categoryRepository.save(cat);
     }
 
     // 根据学院id获取类别组

@@ -1,14 +1,17 @@
 package org.example.graduaterecommendationevaluation.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.graduaterecommendationevaluation.dox.SubmitFile;
 import org.example.graduaterecommendationevaluation.dox.TargetNode;
 import org.example.graduaterecommendationevaluation.dox.TargetSubmit;
 import org.example.graduaterecommendationevaluation.dox.User;
 import org.example.graduaterecommendationevaluation.dto.FileDTO;
+import org.example.graduaterecommendationevaluation.dto.RootDTO;
 import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
 import org.example.graduaterecommendationevaluation.dto.TargetNodeTreeDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
+import org.example.graduaterecommendationevaluation.repository.SubmitFileRepository;
 import org.example.graduaterecommendationevaluation.repository.TargetNodeRepository;
 import org.example.graduaterecommendationevaluation.repository.TargetSubmitRepository;
 import org.example.graduaterecommendationevaluation.repository.UserRepository;
@@ -17,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,14 +34,13 @@ public class TargetService {
     private final TargetNodeRepository targetNodeRepository;
     private final TargetSubmitRepository targetSubmitRepository;
     private final UserRepository userRepository;
+    private final SubmitFileRepository submitFileRepository;
 
     // 添加指标节点信息
     @Transactional
     public void addTargetNode(TargetNode targetNode) {
         targetNodeRepository.save(targetNode);
     }
-
-
 
     // 查看所有指标节点(树)
     public List<TargetNodeTreeDTO> listTargetNodeTree(Long categoryId) {
@@ -163,6 +167,20 @@ public class TargetService {
     // 删除提交节点（submit）
     @Transactional
     public void deleteSubmit(TargetSubmit targetSubmit) {
+        List<SubmitFile> files = submitFileRepository.findByTargetSubmitId(targetSubmit.getId());
+        if(files!=null){
+            for (SubmitFile file : files) {
+                String relativePath = file.getPath(); // 数据库存储的路径
+                File physicalFile = Paths.get(relativePath).toFile();
+                // 删除本地物理文件
+                if (physicalFile.exists()) {
+                    boolean deleteSuccess = physicalFile.delete();
+                    if (!deleteSuccess) {
+                        throw XException.builder().number(Code.ERROR).message("删除文件失败！").build();
+                    }
+                }
+            }
+        }
         targetSubmitRepository.delete(targetSubmit);
     }
 
@@ -176,7 +194,7 @@ public class TargetService {
     }
 
     // 根据根节点id获取学生所有的提交信息
-    public List<SubmitDTO> listSubmits(Long rootId, Long uid) {
+    public List<RootDTO> listSubmits(Long rootId, Long uid) {
         return targetSubmitRepository.listSubmitAndFiles(rootId, uid);
     }
 
@@ -190,5 +208,10 @@ public class TargetService {
                         .build());
         targetSubmitRepository.submitMark(
                 submitId, u.getName(), targetSubmit.getMark(),targetSubmit.getComment(),targetSubmit.getStatus());
+    }
+
+    // 根据节点id获取学生所有的提交信息
+    public List<SubmitDTO> listSubmitsByNode(Long nodeId, Long uid) {
+        return targetSubmitRepository.submitsByNodeId(nodeId, uid);
     }
 }

@@ -9,6 +9,7 @@ import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
 import org.example.graduaterecommendationevaluation.dto.TargetNodeTreeDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
+import org.example.graduaterecommendationevaluation.service.CollegeService;
 import org.example.graduaterecommendationevaluation.service.FileService;
 import org.example.graduaterecommendationevaluation.service.TargetService;
 import org.example.graduaterecommendationevaluation.service.UserService;
@@ -16,6 +17,7 @@ import org.example.graduaterecommendationevaluation.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class StudentController {
     private final TargetService targetService;
     private final UserService userService;
     private final FileService fileService;
+    private final CollegeService collegeService;
 
     // 查看自己所在类别的所有根节点
     @GetMapping("nodes")
@@ -74,7 +77,9 @@ public class StudentController {
     public ResultVO addSubmit(@PathVariable("rootId") Long rootId,
                               @PathVariable("nodeId") Long nodeId,
                               @RequestAttribute("catId") Long catId,
-                              @RequestAttribute("uid") Long uid) {
+                              @RequestAttribute("uid") Long uid,
+                              @RequestBody TargetSubmit targetSubmit) {
+        System.out.println(targetSubmit);
         targetService.judgeNode(nodeId, catId);
         targetService.judgeNode(rootId, catId);
         targetService.judgeRoot(rootId);
@@ -97,6 +102,8 @@ public class StudentController {
                 .targetNodeId(nodeId)
                 .rootNodeId(rootId)
                 .name(parentNode.getName() + " — " + thisNode.getName())
+                .submitName(targetSubmit.getSubmitName())
+                .comment(targetSubmit.getComment())
                 .status(TargetSubmit.SUBMIT)
                 .record("[]")
                 .build();
@@ -137,16 +144,12 @@ public class StudentController {
     @PostMapping("submit-file/upload/{targetSubmitId}")
     public ResultVO addFile(@PathVariable("targetSubmitId") Long targetSubmitId,
                             MultipartFile file,
-                            @RequestAttribute("uid")  Long uid) {
+                            @RequestAttribute("uid")  Long uid) throws IOException {
         if (targetSubmitId == null || file == null || uid == null) {
             return ResultVO.error(Code.ERROR, "参数异常！");
         }
-        try {
             fileService.uploadFile(targetSubmitId, file, uid);
             return ResultVO.ok();
-        } catch (Exception e) {
-            return ResultVO.error(Code.ERROR, "文件上传失败！");
-        }
     }
 
     // 学生删除佐证文件
@@ -156,5 +159,21 @@ public class StudentController {
         return ResultVO.ok();
     }
 
-    // 学生打开文件
+    // 学生获取基本信息
+    @GetMapping("info")
+    public ResultVO myInfo(@RequestAttribute("uid") Long uid) {
+        return ResultVO.success(userService.getUserInfo(uid)) ;
+    }
+
+    // 学生获取类别信息
+    @GetMapping("category")
+    public ResultVO getMyCategory(@RequestAttribute("catId") Long catId) {
+        return ResultVO.success(collegeService.getCategory(catId));
+    }
+
+    // 获取统计信息
+    @GetMapping("infodetail")
+    public ResultVO getMyDetail(@RequestAttribute("uid") Long uid) {
+        return ResultVO.success(userService.getDetail(uid)) ;
+    }
 }

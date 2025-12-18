@@ -5,6 +5,7 @@ import org.example.graduaterecommendationevaluation.dox.Category;
 import org.example.graduaterecommendationevaluation.dox.Major;
 import org.example.graduaterecommendationevaluation.dox.TargetNode;
 import org.example.graduaterecommendationevaluation.dox.User;
+import org.example.graduaterecommendationevaluation.dto.CategoryDTO;
 import org.example.graduaterecommendationevaluation.dto.TargetNodeTreeDTO;
 import org.example.graduaterecommendationevaluation.exception.Code;
 import org.example.graduaterecommendationevaluation.exception.XException;
@@ -45,10 +46,10 @@ public class CollegeAdminController {
 
     // 添加类别
     @PostMapping("categorys")
-    public ResultVO addCategory(@RequestBody Category category,
+    public ResultVO addCategory(@RequestBody Category cat,
                                 @RequestAttribute("collegeId") Long collegeId) {
-        category.setCollegeId(collegeId);
-        collegeService.addCategory(category);
+        cat.setCollegeId(collegeId);
+        collegeService.addCategory(cat);
         return ResultVO.ok();
     }
 

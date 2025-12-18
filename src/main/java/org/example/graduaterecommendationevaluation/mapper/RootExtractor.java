@@ -1,7 +1,8 @@
 package org.example.graduaterecommendationevaluation.mapper;
 
 import org.example.graduaterecommendationevaluation.dto.FileDTO;
-import org.example.graduaterecommendationevaluation.dto.SubmitDTO;
+
+import org.example.graduaterecommendationevaluation.dto.RootDTO;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
@@ -12,14 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SubmitExtractor implements ResultSetExtractor<List<SubmitDTO>> {
+public class RootExtractor implements ResultSetExtractor<List<RootDTO>> {
     @Override
-    public List<SubmitDTO> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        Map<Long, SubmitDTO> submitDtoMap = new HashMap<>();
+    public List<RootDTO> extractData(ResultSet rs) throws SQLException, DataAccessException {
+        Map<Long, RootDTO> submitDtoMap = new HashMap<>();
         while (rs.next()) {
             Long submitId = rs.getLong("ts_id");
-            Long targetNodeId = rs.getLong("ts_target_node_id");
-            Long rootNodeId = rs.getLong("ts_root_node_id");
             String tsName = rs.getString("ts_name");
             String submitName = rs.getString("ts_submit_name");
             String status = rs.getString("ts_status");
@@ -34,12 +33,10 @@ public class SubmitExtractor implements ResultSetExtractor<List<SubmitDTO>> {
             long fileId = rs.getLong("sf_id");
             String fileName = rs.getString("sf_filename");
 
-            SubmitDTO submitDTO = submitDtoMap.get(submitId);
-            if (submitDTO == null) {
-                SubmitDTO sd = SubmitDTO.builder()
+            RootDTO rootDTO = submitDtoMap.get(submitId);
+            if (rootDTO == null) {
+                RootDTO sd = RootDTO.builder()
                         .id(submitId)
-                        .targetNodeId(targetNodeId)
-                        .rootNodeId(rootNodeId)
                         .name(tsName)
                         .submitName(submitName)
                         .status(status)
@@ -50,14 +47,14 @@ public class SubmitExtractor implements ResultSetExtractor<List<SubmitDTO>> {
                         .record(record)
                         .build();
                 submitDtoMap.put(submitId, sd);
-                submitDTO = sd;
+                rootDTO = sd;
             }
             if(fileId != 0 ) {
                 FileDTO fileDTO = FileDTO.builder()
                         .id(fileId)
                         .fileName(fileName)
                         .build();
-                submitDTO.getFiles().add(fileDTO);
+                rootDTO.getFiles().add(fileDTO);
             }
         }
         return new ArrayList<>(submitDtoMap.values());

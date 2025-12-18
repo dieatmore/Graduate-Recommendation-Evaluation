@@ -11,10 +11,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SubmitDTO {
+public class RootDTO {
     private Long id;
-    private Long targetNodeId;
-    private Long rootNodeId;
     private String name;
     private String submitName;
     private String status;

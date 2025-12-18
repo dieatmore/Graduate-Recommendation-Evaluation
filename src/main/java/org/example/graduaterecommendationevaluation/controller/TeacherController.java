@@ -138,5 +138,11 @@ public class TeacherController {
         return ResultVO.ok();
     }
 
+    // 根据节点id获取该节点下的所有提交记录
+    @GetMapping("students/{studentId}/nodes/{nodeId}")
+    public ResultVO submitsByNode(@PathVariable("studentId") Long studentId,
+                                  @PathVariable("nodeId") Long nodeId) {
+        return ResultVO.success(targetService.listSubmitsByNode(nodeId,studentId ));
+    }
 
 }

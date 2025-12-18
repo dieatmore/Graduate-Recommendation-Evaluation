@@ -36,7 +36,7 @@ create table if not exists `category`
     id         bigint        primary key ,
     name       varchar(10)   not null ,
     college_id bigint        not null ,
-    weight     json          not null comment '{"scoreWeight", "scoreAll"}(加权成绩，综合成绩)' ,
+    weight     json          not null comment '[{"scoreName", "scoreWeight"}](加权成绩，综合成绩)' ,
 
     create_time datetime         not null default current_timestamp,
     update_time datetime         not null default current_timestamp on update current_timestamp,
@@ -129,8 +129,8 @@ create table if not exists `submit_file`
 (
     id               bigint         primary key,
     target_submit_id bigint         not null,
-    filename         varchar(100)   not null,
-    path             varchar(100)   not null,
+    filename         varchar(300)   not null,
+    path             varchar(200)   not null,
 
 
     create_time      datetime     not null default current_timestamp,

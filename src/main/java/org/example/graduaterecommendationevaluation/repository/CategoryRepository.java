@@ -1,6 +1,7 @@
 package org.example.graduaterecommendationevaluation.repository;
 
 import org.example.graduaterecommendationevaluation.dox.Category;
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
@@ -23,4 +24,6 @@ public interface CategoryRepository extends ListCrudRepository<Category,Long> {
     void deleteByIdAndCollegeId(Long categoryId, Long collegeId);
 
     boolean existsByCollegeId(Long collegeId);
+
+
 }

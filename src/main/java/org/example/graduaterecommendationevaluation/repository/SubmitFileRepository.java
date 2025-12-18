@@ -4,6 +4,9 @@ import org.example.graduaterecommendationevaluation.dox.SubmitFile;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 
 public interface SubmitFileRepository extends ListCrudRepository<SubmitFile,Long> {
     @Query("""
@@ -13,4 +16,6 @@ public interface SubmitFileRepository extends ListCrudRepository<SubmitFile,Long
            and sf.filename =:validFilename
            """)
     SubmitFile findByTargetSubmitIdAndFilename(Long targetSubmitId, String validFilename);
+
+    List<SubmitFile> findByTargetSubmitId(Long targetSubmitId);
 }

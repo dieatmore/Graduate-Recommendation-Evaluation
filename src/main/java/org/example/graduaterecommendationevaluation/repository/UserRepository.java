@@ -62,7 +62,10 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
            select ts.id as ts_id,
                   ts.name as ts_name,
                   ts.status as ts_status,
+                  ts.submit_name as ts_submit_name,
+                  ts.root_node_id as ts_root_node_id,
                   ts.mark as ts_mark,
+                  ts.target_node_id as ts_target_node_id,
                   ts.comment as ts_comment,
                   ts.record as ts_record,
                   tn.max_mark as max_mark,
@@ -83,4 +86,26 @@ public interface UserRepository extends ListCrudRepository<User, Long> {
            where u.id = :uid
            """)
     StudentInfoDTO getInfoById(Long uid);
+
+    @Query("""
+            select
+               u.id,
+               u.name,
+           #     已认定成绩
+               sum(case when ts.status = '59G7' then ts.mark else 0 end) as confirmed_score,
+           #     已认定项数
+               sum(case when ts.status = '59G7' then 1 else 0 end) as confirmed_items,
+           #     待审核项数
+               sum(case when ts.status = 'y02Q' then 1 else 0 end) as pending_items,
+           #     待修改项数
+               sum(case when ts.status = 'P5eR' then 1 else 0 end) as modify_items,
+           #     已驳回项数
+               sum(case when ts.status = 'b7Yz' then 1 else 0 end) as rejected_items,
+           #     总提交项数
+               count(ts.id) as total_items
+           from user u
+           left join target_submit ts on ts.user_id = u.id
+           where u.id = :uid
+           """)
+    StudentsDTO getDetail(Long uid);
 }

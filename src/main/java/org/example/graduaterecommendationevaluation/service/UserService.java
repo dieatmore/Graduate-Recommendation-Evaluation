@@ -122,6 +122,11 @@ public class UserService {
         return userRepository.listStudents(majorId, User.STUDENT);
     }
 
+    // 学生获取个人统计信息
+    public StudentsDTO getDetail(Long uid) {
+        return userRepository.getDetail(uid);
+    }
+
     // 查看导师及其管理的类别
     public List<TeacherCatDTO> getTeacherCats(Long collegeId) {
         List<User> teachers = userRepository.findByCollegeIdAndRole(collegeId, User.TEACHER);
