@@ -1,0 +1,51 @@
+name: 前端部署
+on:
+  push:
+    branches: ['main']
+  pull_request: # PR也触发
+    branches: ['main']
+
+jobs:
+  # 后端Job
+  deploy-backend:
+    name: 后端部署
+    runs-on: ubuntu-latest
+    env:
+      BASE_DIR: /www/wwwroot/recommendation
+    steps:
+      - name: 拉取后端代码
+        uses: actions/checkout@v4
+        with:
+          repository: dieatmore/Graduate-Recommendation-Evaluation
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: backend
+
+      - name: 配置Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: ./backend/pom.xml
+
+      - name: 后端Maven打包
+        run: |
+          cd backend
+          mkdir -p ~/.m2
+          echo '<?xml version="1.0" encoding="UTF-8"?><settings><mirrors><mirror><id>aliyunmaven</id><mirrorOf>central</mirrorOf><url>https://maven.aliyun.com/repository/public</url></mirror></mirrors></settings>' > ~/.m2/settings.xml
+          mvn clean package -DskipTests -T 2C
+        timeout-minutes: 5
+
+      - name: 上传后端Jar包+重启
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            mkdir -p /www/wwwroot/recommendation/openjdk
+            rm -rf /www/wwwroot/recommendation/openjdk/graduate-recommendation-evaluation.jar
+            scp ${{ github.workspace }}/backend/target/graduate-recommendation-evaluation.jar root@${{ secrets.SSH_HOST }}:/www/wwwroot/recommendation/openjdk/
+            cd /www/wwwroot/recommendation
+            docker compose up --force-recreate --no-deps -d openjdk
