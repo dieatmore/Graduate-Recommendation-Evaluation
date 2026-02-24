@@ -1,0 +1,3 @@
+org\example\graduaterecommendationevaluation\GraduateRecommendationEvaluationApplicationTests.class
+org\example\graduaterecommendationevaluation\service\UserServiceTest.class
+org\example\graduaterecommendationevaluation\repository\CategoryRepositoryTest.class
