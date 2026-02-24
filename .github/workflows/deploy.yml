@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 配置Java 21
-        uses: appleboy/setup-java@v4
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
