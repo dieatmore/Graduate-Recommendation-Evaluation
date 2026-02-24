@@ -1,9 +1,9 @@
-name: 前端部署
+name: 后端部署
 on:
   push:
-    branches: ['main']
+    branches: ['master']
   pull_request: # PR也触发
-    branches: ['main']
+    branches: ['master']
 
 jobs:
   # 后端Job
