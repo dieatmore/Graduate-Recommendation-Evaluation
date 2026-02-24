@@ -43,7 +43,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "backend/target/graduate-recommendation-evaluation.jar"
+          source: "backend/backend/target/graduate-recommendation-evaluation.jar"
           target: ${{ env.BASE_DIR }}/openjdk/
           rm: true
         
