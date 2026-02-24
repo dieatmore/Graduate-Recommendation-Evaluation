@@ -37,7 +37,7 @@ jobs:
         timeout-minutes: 5
 
       - name: 上传后端Jar包
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/scp-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
