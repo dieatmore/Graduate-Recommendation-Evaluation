@@ -36,7 +36,18 @@ jobs:
           mvn clean package -DskipTests -T 2C
         timeout-minutes: 5
 
-      - name: 上传后端Jar包+重启
+      - name: 上传后端Jar包
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "backend/target/graduate-recommendation-evaluation.jar"
+          target: ${{ env.BASE_DIR }}/openjdk/
+          rm: true
+        
+      - name: 重启后端容器
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -44,8 +55,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            mkdir -p /www/wwwroot/recommendation/openjdk
-            rm -rf /www/wwwroot/recommendation/openjdk/graduate-recommendation-evaluation.jar
-            scp ${{ github.workspace }}/backend/target/graduate-recommendation-evaluation.jar root@${{ secrets.SSH_HOST }}:/www/wwwroot/recommendation/openjdk/
-            cd /www/wwwroot/recommendation
+            cd ${{ env.BASE_DIR }}
             docker compose up --force-recreate --no-deps -d openjdk
