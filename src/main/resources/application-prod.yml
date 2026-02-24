@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: 'jdbc:mysql://${dhost}/${database-name}?createDatabaseIfNotExist=true'
+    username: ${dusername}
+    password: ${dpassword}
+    hikari:
+      maximum-pool-size: 5
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+  jackson:
+    default-property-inclusion: non_null
+
+logging:
+  level:
+    root: warn
+    org.example: debug
+  pattern:
+    console: '%-5level %C.%M[%line] - %msg%n'
+
+my:
+  secretkey: ${secretkey}
+  upload: '/home/upload/'
