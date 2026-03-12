@@ -113,6 +113,7 @@ create table if not exists `target_submit`
     root_node_id bigint                   not null ,
     mark           decimal(5, 2) unsigned        null ,
     name           varchar(200)           not null comment '提交项名称' ,
+    submit_name    varchar(200)           not null ,
     comment        text                   null comment '提交说明',
     status         char(4)                not null comment '已提交、待修改、被驳回、已认定' ,
     record         json                   not null comment '[{"username", "mark", "comment", "time"}]' ,
