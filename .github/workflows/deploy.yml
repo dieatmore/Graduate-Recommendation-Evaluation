@@ -38,7 +38,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "target/.jar"  # 关键修复：用通配符匹配所有Jar包
-          target: ${{ env.BASE_DIR }}/openjdk/
+          target: ${{ env.BASE_DIR }}/openjdk/home/
+          strip_components: 1
           rm: true
 
       - name: 重启后端容器
