@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "target/*.jar"  # 关键修复：用通配符匹配所有Jar包
-          target: ${{ env.BASE_DIR }}/openjdk/
+          target: ${{ env.BASE_DIR }}/openjdk/home/
           rm: true
 
       - name: 重启后端容器
@@ -50,4 +50,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ${{ env.BASE_DIR }}
+            ls -l ./openjdk/home/
             docker compose up --force-recreate --no-deps -d openjdk
